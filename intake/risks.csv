@@ -1,0 +1,13 @@
+risk_id,description,category,likelihood,impact,mitigation,owner,status
+R1,Standards usage rights/licensing may restrict reproduction,Legal,Medium,High,"Prefer summaries with citations; seek permissions where required; link to sources",,Open
+R2,Spec inaccuracies could misguide layouts,Quality,Medium,High,"Dual-source verification; review checklist; record source/version per spec",,Open
+R3,Scale/standard variants create ambiguity (e.g., HO 1:87 vs 1:87.1),Quality,Medium,Medium,"Document variants; present ranges/notes; show source per value",,Open
+R4,Scope creep into tools/forums dilutes schedule,Scope,High,Medium,"Enforce non-goals; backlog triage; change control",,Open
+R5,Content curation slower than planned,Schedule,Medium,Medium,"Time-box research; parallelize with converter work; prioritize top specs",,Open
+R6,Unit confusion (metric/imperial) hurts usability,UX,Low,Medium,"Explicit unit selection; examples; glossary",,Open
+R7,Live control may introduce safety/liability concerns (equipment damage or injury),Safety,Medium,High,"Prominent cautions; acknowledgement gates; limit v1 to local/network-limited use; document safe-test procedures",,Open
+R8,Device/protocol fragmentation across command stations and accessories,Technical,High,High,"Prioritize a small set of documented interfaces first; publish compatibility matrix; incremental expansion",,Open
+R9,Latency/reliability issues degrade real-time control experience,Technical,Medium,High,"Define acceptable latency thresholds; provide status/feedback; offline-safe defaults",,Open
+R10,Decoder CV differences complicate programming utilities,Quality,Medium,Medium,"Use decoder profiles; validate against sample hardware; clear error messaging",,Open
+R11,Licensing/format barriers for CAD/simulation interoperability,Legal,Medium,Medium,"Prefer open or documented formats; seek permissions where needed; provide attribution",,Open
+R12,Security exposure if remote control features are expanded,Security,Low,High,"Constrain v1 to local-only; document security considerations before any remote features",,Open

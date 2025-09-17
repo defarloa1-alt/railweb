@@ -1,0 +1,30 @@
+project: railweb
+summary: "Site for model railroaders to reference specifications, convert real-world measurements by model scale, access guidance on themes like automation and scenery, and provide first-class tools for real-time layout control, DCC programming, and simulation/CAD integration."
+in_scope:
+- "Reference library of model railroading specifications and standards (e.g., scales, gauges, clearances, couplers, track radii)."
+- "Scale conversion calculators (metric/imperial; select model scale; rounding rules documented)."
+- "Guidance content: automation and scenery themes (structured articles/checklists)."
+- "Basic navigation/search to locate specs and guides."
+- "Real-time layout control tools (e.g., throttle, turnout/route control, routing/automation interface) — first-class."
+- "DCC programming utilities (e.g., CV read/write in service and ops modes; decoder profile lookup) — first-class."
+- "Simulation/CAD integration for track-plan import/export and virtual operations — first-class."
+out_of_scope:
+- "E-commerce/marketplace/classifieds."
+- "Social forums or user-generated content."
+- "Cloud-hosted remote operations beyond local/network-limited usage for v1."
+target_scales: [N, HO, S, O, G, Z, TT]
+audience: ["Hobbyists", "Clubs/layout planners", "Educators"]
+constraints:
+- "Spec and conversion accuracy must align with published standards; sources cited."
+- "Content licensing and attributions honored."
+- "Operational safety: clearly display cautions and require explicit user acknowledgement for live control features."
+acceptance_criteria:
+- "Users can look up a spec by scale with a cited value."
+- "Users can convert a real-world measurement to a chosen model scale."
+- "Users can perform basic live layout control actions on a documented, supported interface."
+- "Users can read/write core DCC CVs for supported decoders with audit logging."
+- "Users can import a sample track plan and run a virtual session in a supported simulator/CAD workflow."
+dependencies:
+- "Access to authoritative standards (e.g., NMRA; others as applicable)."
+- "Availability of compatible command stations/interfaces and decoder documentation for testing."
+- "Licensing/permissions for supported simulation/CAD file formats and interoperability notes."

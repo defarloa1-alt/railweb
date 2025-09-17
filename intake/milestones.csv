@@ -1,0 +1,12 @@
+milestone_id,name,definition_of_done,target_window,dependencies
+M0,Initiation & Intake approval,"Scope, assumptions, constraints, and success criteria agreed",2025-09-18/2025-09-24,
+M1,Information Architecture & Content Map,"Site sections, spec taxonomy, tool areas (control/DCC/sim) outlined",2025-09-25/2025-10-01,M0
+M2,Spec Corpus Curation,"Target scales finalized; primary specs identified and mapped to sources",2025-10-02/2025-10-16,M1
+M2A,Hardware & Protocol Inventory,"Supported command stations/interfaces and CAD/sim formats prioritized",2025-10-02/2025-10-09,M1
+M3,Scale Converters MVP,"Unit handling and conversions for target scales verified against test set",2025-10-09/2025-10-23,"M1,M2"
+M4,Guidance Themes MVP,"Automation and scenery guides drafted with checklists and references",2025-10-16/2025-10-30,M1
+M4A,Real-time Control MVP,"Local demo: throttle and turnout/route actions on a documented interface",2025-10-16/2025-10-30,"M1,M2A"
+M4B,DCC Programming MVP,"CV read/write for a shortlist of decoders with logging and safeguards",2025-10-23/2025-11-06,"M1,M2A"
+M4C,Simulation/CAD Integration MVP,"Import/export of at least one track-plan format and basic virtual session",2025-10-23/2025-11-06,M1
+M5,Beta Readiness,"≥10 core specs published; converters and guides reviewed/QA'd; control/DCC/sim MVPs verified",2025-11-07/2025-11-21,"M2,M3,M4,M4A,M4B,M4C"
+M6,Launch Baseline,"Landing/search/core pages stable; citations complete; control/DCC/sim features documented",2025-11-22/2025-11-29,M5
