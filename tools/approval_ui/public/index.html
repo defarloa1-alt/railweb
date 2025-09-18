@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Railweb Approval UI (Prototype)</title>
+    <style>
+      body { font-family: system-ui, Arial, sans-serif; padding: 2rem; }
+      label { display:block; margin-top: .5rem }
+      input, textarea { width: 100%; max-width: 480px }
+      button { margin-top: 1rem }
+      .out { margin-top: 1rem; white-space: pre-wrap }
+    </style>
+  </head>
+  <body>
+    <h1>Railweb Approval UI (Prototype)</h1>
+    <p>This is a demo reviewer UI. It will write `push_authorized_by` into a run's `meta.yaml` in the local repo.</p>
+
+    <label>Run ID (e.g. railweb-20250918-ops02)
+      <input id="runId" />
+    </label>
+
+    <label>Approver name / email
+      <input id="approver" />
+    </label>
+
+    <label>Note (optional)
+      <textarea id="note" rows="3"></textarea>
+    </label>
+
+    <button id="approve">Approve</button>
+
+    <div class="out" id="out"></div>
+
+    <script>
+      document.getElementById('approve').addEventListener('click', async () => {
+        const runId = document.getElementById('runId').value.trim();
+        const approver = document.getElementById('approver').value.trim();
+        const note = document.getElementById('note').value.trim();
+        const out = document.getElementById('out');
+        out.textContent = 'Working...';
+        try {
+          const resp = await fetch('/api/approve', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ runId, approver, note })
+          });
+          const data = await resp.json();
+          out.textContent = JSON.stringify(data, null, 2);
+        } catch (err) {
+          out.textContent = String(err);
+        }
+      });
+    </script>
+  </body>
+</html>
