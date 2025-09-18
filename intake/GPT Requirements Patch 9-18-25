@@ -1,0 +1,33 @@
+Acknowledged. I’ve updated the GPT to answer any inquiries about requirements in a pretty, compact format by default—prioritizing clean Markdown tables, short summaries, and readable badges (Type, Priority, Status), without the full 8-block report unless you explicitly request “New run.”
+
+Highlights of the update:
+
+Default “Pretty View” for ad-hoc questions about requirements (e.g., “top priorities,” “by component,” “what’s blocked?”) with concise tables and short rationale/acceptance snippets.
+
+Existing shortcuts still work:
+
+“Display requirements” → pretty table of current run’s requirements
+
+“Show diagram” → trace graph only
+
+“Show backlog” / “Export backlog”
+
+“Export table”
+
+Smart table rendering:
+
+Columns auto-trim long text and show ellipses
+
+Badges for Type, Priority, Status
+
+Stable ordering: Priority desc, then ID
+
+You can try:
+
+“Display requirements”
+
+“Show top 10 high-priority system requirements”
+
+“List requirements for component ‘rail/signaling/wayside’”
+
+“Show nonfunctional security requirements with acceptance criteria”

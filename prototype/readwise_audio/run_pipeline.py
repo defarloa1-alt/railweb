@@ -96,6 +96,30 @@ def run(dry_run: bool = True, generate_audio: bool = False) -> None:
         logger.exception("Failed to write metadata to %s", meta_path)
 
 
+def _preflight_checks(dry_run: bool, generate_audio: bool) -> None:
+    """Validate environment before doing non-dry-run operations."""
+    missing = []
+    if not dry_run:
+        # when running for real, ensure keys are present
+        if not os.getenv("OPENAI_API_KEY"):
+            missing.append("OPENAI_API_KEY")
+        if generate_audio and not os.getenv("ELEVENLABS_API_KEY"):
+            missing.append("ELEVENLABS_API_KEY")
+        # READWISE token is optional if you're not pulling from Readwise, but warn
+        if not os.getenv("READWISE_TOKEN"):
+            logger.warning("READWISE_TOKEN not set; fetch_highlights() will use sample data unless you provide a token.")
+    if missing:
+        logger.error("Missing required environment variables for real run: %s", ", ".join(missing))
+        raise SystemExit(2)
+
+    # If audio is requested, check that ffmpeg is available to stitch segments
+    if generate_audio:
+        from shutil import which
+
+        if which("ffmpeg") is None:
+            logger.warning("ffmpeg not found on PATH. Stitching audio will require ffmpeg to be installed.")
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run the Readwise→Audio prototype")
     parser.add_argument("--no-dry-run", dest="dry_run", action="store_false",

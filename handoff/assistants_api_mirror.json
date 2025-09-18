@@ -1,0 +1,22 @@
+{
+  "title": "railweb-assistants-mirror",
+  "version": "1",
+  "description": "Minimal Assistants API mirror spec for Planner/Architect automation.",
+  "endpoints": {
+    "ingest_handoff": {
+      "method": "POST",
+      "path": "/ingest_handoff",
+      "body": { "path": "string", "run_id": "string", "dry_run": "boolean" }
+    },
+    "validate_handoff": {
+      "method": "POST",
+      "path": "/validate_handoff",
+      "body": { "file": "string" }
+    },
+    "generate_index": {
+      "method": "POST",
+      "path": "/generate_index",
+      "body": { "run_id": "string", "artifacts": ["string"], "validation": "object" }
+    }
+  }
+}

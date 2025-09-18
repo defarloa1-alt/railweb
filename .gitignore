@@ -4,3 +4,5 @@ Thumbs.db
 __pycache__/ 
 node_modules/ 
 *.log 
+.secrets.baseline
+runs/

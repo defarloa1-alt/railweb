@@ -1,0 +1,57 @@
+# GitHub Actions workflow (for review) to enforce GPT preview checklist presence on PRs
+# Placed under intake/exports for intake-only agent review. This file is a scaffold and must be moved to .github/workflows/ to be active.
+
+name: Enforce GPT Preview Checklist
+
+on:
+  pull_request:
+    types: [opened, edited, reopened, synchronize]
+
+jobs:
+  check-gpt-preview-checklist:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Detect GPT-related changes
+        id: detect
+        run: |
+          echo "CHANGED_FILES<<EOF" > changed_files.txt
+          git fetch origin ${{ github.base_ref }} --depth=1 || true
+          git diff --name-only origin/${{ github.base_ref }}...${{ github.sha }} > changed_files.txt || true
+          cat changed_files.txt
+          # simple heuristic: files under intake/ or files mentioning 'gpt' or 'GPT' in path
+          grep -E "(^intake/)|([gG][pP][tT])" changed_files.txt || true
+          if grep -E "(^intake/)|([gG][pP][tT])" changed_files.txt >/dev/null; then
+            echo "gpt_changes=true" >> $GITHUB_OUTPUT
+          else
+            echo "gpt_changes=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Fetch PR body
+        id: pr_body
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const pr = await github.rest.pulls.get(context.repo);
+            return pr.data.body || '';
+
+      - name: Validate GPT-preview checklist presence
+        if: steps.detect.outputs.gpt_changes == 'true'
+        id: validate
+        run: |
+          PR_BODY='${{ steps.pr_body.outputs.result }}'
+          echo "PR_BODY: $PR_BODY" > pr_body.txt
+          # Look for a checklist heading 'GPT preview checklist' or a checklist item - [ ] GPT preview
+          echo "$PR_BODY" | grep -i "gpt preview checklist" || echo "$PR_BODY" | grep -E "- \[.\] .*gpt" || exit 1
+
+      - name: Fail with guidance
+        if: steps.detect.outputs.gpt_changes == 'true' && steps.validate.outcome != 'success'
+        run: |
+          echo "PR missing required GPT preview checklist. Please add the GPT preview checklist section to your PR body with the required items." >&2
+          exit 1
+
+      - name: Success
+        if: steps.detect.outputs.gpt_changes == 'false' || steps.validate.outcome == 'success'
+        run: echo "No GPT-related changes detected or PR includes required checklist."

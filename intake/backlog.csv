@@ -1,0 +1,7 @@
+id,title,priority,owner,depends,status,estimate_sp,notes
+task:rail/enable-real-run,Enable real-run mode with API gating,high,planner,,not-started,8,Depends on SR-2 and SR-3; requires preflight checks and gating UI
+task:rail/define-publishing,Define publishing path (S3/PR) with human gate,high,planner,,not-started,5,Define S3 contract and manual review step
+task:rail/configure-models,Configure supported LLM models (OPENAI_MODEL),medium,architect,,not-started,3,Document allowed models and default
+task:rail/tune-retry,Define retry/backoff policy for external APIs,medium,architect,,not-started,3,Standardize backoff and max attempts
+task:rail/add-mocked-tests,Add mocked tests for OpenAI/ElevenLabs/Readwise,medium,dev,,not-started,5,Use pytest and mocking libs for CI
+task:rail/add-retention,Define artifact retention & cleanup policy,low,ops,,not-started,2,Where to store audio and for how long

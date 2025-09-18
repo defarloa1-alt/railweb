@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://defarloa1-alt.github.io/railweb/handoff/requirements-to-planner-architect.schema.json",
+  "title": "Requirements-to-Planner-Architect Handoff",
+  "description": "Machine-readable contract between Requirements Engineer, Planner GPT, and Architect GPT.",
+  "type": "object",
+  "required": ["id", "title", "summary", "requirements"],
+  "properties": {
+    "id": { "type": "string" },
+    "title": { "type": "string" },
+    "summary": { "type": "string" },
+    "scope": {
+      "oneOf": [
+        { "type": "string" },
+        { "type": "array", "items": { "type": "string" } }
+      ]
+    },
+    "constraints": { "type": "array", "items": { "type": "string" } },
+    "artifacts": { "type": "object" },
+    "requirements": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "text"],
+        "properties": {
+          "id": { "type": "string" },
+          "text": { "type": "string" },
+          "rationale": { "type": "string" },
+          "verification": { "type": "string" },
+          "acceptance_criteria": { "type": "string" }
+        }
+      }
+    },
+    "acceptance_criteria": { "type": "array", "items": { "type": "string" } },
+    "provenance": {
+      "type": "object",
+      "properties": {
+        "source": { "type": "string" },
+        "source_commit": { "type": "string" },
+        "run_id": { "type": "string" },
+        "date_synced": { "type": "string", "format": "date-time" }
+      }
+    },
+    "contacts": { "type": "object" },
+    "notes": { "type": "string" }
+  },
+  "additionalProperties": false
+}

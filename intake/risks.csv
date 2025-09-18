@@ -11,3 +11,6 @@ R9,Latency/reliability issues degrade real-time control experience,Technical,Med
 R10,Decoder CV differences complicate programming utilities,Quality,Medium,Medium,"Use decoder profiles; validate against sample hardware; clear error messaging",,Open
 R11,Licensing/format barriers for CAD/simulation interoperability,Legal,Medium,Medium,"Prefer open or documented formats; seek permissions where needed; provide attribution",,Open
 R12,Security exposure if remote control features are expanded,Security,Low,High,"Constrain v1 to local-only; document security considerations before any remote features",,Open
+R13,Accidental publish of sensitive or provenance-lacking artifacts,Quality,Medium,High,"Enforce human review gate and dry-run default; CI validation blocks publish",,Open
+R14,API key exposure in logs/commits,Security,Medium,High,"Secrets management (no hard-coded keys), scan commits and prevent leaking via pre-commit hooks",,Open
+R15,LLM JSON fragility breaking pipeline,Technical,Medium,Medium,"Add strict schema validation, function-calling where possible, and golden tests for LLM outputs",,Open

@@ -1,0 +1,65 @@
+{
+  "id": "RAILWEB-PLANNER-1",
+  "title": "Railweb v1 Planner/Architect Handoff",
+  "summary": "Baseline handoff packet for Planner and Architect GPTs describing scope, constraints, key artifacts, and actions to accept the repo as a stable baseline.",
+  "scope": [
+    "web-based reference site for model railroad hobbyists",
+    "scale conversion calculators, spec corpus, tooling",
+    "local-only live control for v1 (safety-first)"
+  ],
+  "constraints": [
+    "no e-commerce",
+    "provenance-first: every exported artifact must include source and version",
+    "opt-in hardware control; dry-run default for side-effecting ops"
+  ],
+  "artifacts": {
+    "prototype": {
+      "path": "prototype/readwise_audio",
+      "description": "Readwise->Audio pipeline with provenance-first metadata, opt-in audio generation, and preflight checks"
+    },
+    "schema": {
+      "path": "schema/out_audio.metadata.schema.json",
+      "description": "JSON Schema for out_audio.metadata.json artifacts"
+    },
+    "tests": {
+      "path": "tests",
+      "description": "Unit tests and validator script in scripts/validate_metadata.py"
+    },
+    "intake": {
+      "path": "intake",
+      "description": "Backlog, scope, requirements, and risk registers"
+    }
+  },
+  "requirements": [
+    {
+      "id": "SR-1",
+      "description": "Preserve provenance for all exported highlights (author, source_title, exported_at, checksum)"
+    },
+    {
+      "id": "SR-2",
+      "description": "Audio generation must be opt-in and require explicit --audio/--no-dry-run flags"
+    },
+    {
+      "id": "SR-3",
+      "description": "Preflight checks validate presence of API keys and ffmpeg before any non-dry-run execution"
+    }
+  ],
+  "acceptance_criteria": [
+    "Repository passes pytest (tests/ all pass)",
+    "Schema validator accepts sample out_audio.metadata.json",
+    "Backlog and risks updated with owners, priorities, and mitigations"
+  ],
+  "contacts": {
+    "planner": "planner@example.com",
+    "architect": "architect@example.com",
+    "dev": "dev@example.com"
+  },
+  "notes": "This machine-readable handoff is intended for Planner/Architect GPTs and automation. It mirrors the human-friendly handoff document. All artifacts referenced are relative to repository root.",
+  "version": "1",
+  "provenance": {
+    "source": "handoff/requirements-to-planner-architect.md",
+    "source_commit": "<replace-with-commit-sha>",
+    "run_id": "<replace-with-run-id>",
+    "date_synced": "2025-09-18T00:00:00Z"
+  }
+}

@@ -1,10 +1,28 @@
 """Simple fetcher for Readwise highlights (or demo data in DRY_RUN).
+
+This module evaluates DRY_RUN at call time to avoid import-time
+surprises when the runner sets the environment after imports.
 """
 import os
 import json
+import time
 from typing import List, Dict
 
-DRY_RUN = os.getenv("DRY_RUN")
+
+def _is_dry_run() -> bool:
+    v = os.getenv("DRY_RUN", "0")
+    return v.lower() in ("1", "true", "yes", "on")
+
+
+def _retry_request(func, retries=3, backoff=0.5, *args, **kwargs):
+    last_exc = None
+    for i in range(retries):
+        try:
+            return func(*args, **kwargs)
+        except Exception as e:
+            last_exc = e
+            time.sleep(backoff * (2 ** i))
+    raise last_exc
 
 
 def fetch_sample_highlights() -> List[Dict]:
@@ -36,8 +54,10 @@ def fetch_sample_highlights() -> List[Dict]:
 
 def fetch_from_readwise(token: str) -> List[Dict]:
     import requests
+
     headers = {"Authorization": f"Token {token}"}
-    resp = requests.get("https://readwise.io/api/v2/highlights/", headers=headers)
+    # Use a small timeout and retry wrapper for resilience
+    resp = _retry_request(lambda: requests.get("https://readwise.io/api/v2/highlights/", headers=headers, timeout=10))
     resp.raise_for_status()
     data = resp.json()
     # Normalize to a simple list of highlights
@@ -74,7 +94,7 @@ def fetch_from_readwise(token: str) -> List[Dict]:
 
 def fetch_highlights() -> List[Dict]:
     token = os.getenv("READWISE_TOKEN")
-    if DRY_RUN or not token:
+    if _is_dry_run() or not token:
         return fetch_sample_highlights()
     return fetch_from_readwise(token)
 

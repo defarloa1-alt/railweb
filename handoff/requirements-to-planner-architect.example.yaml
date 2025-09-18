@@ -1,0 +1,42 @@
+id: handoff:railweb/readwise-audio/mvp
+title: "Railweb Readwise→Audio Handoff"
+summary: "Machine-readable contract for Planner and Architect GPTs. Captures requirements, constraints, risks, and artifacts for the Readwise→Audio prototype."
+scope: "Intake v1 schema (scope.yml, optional backlog.csv); metadata JSON ingestion; safety gating rules applied."
+constraints:
+  - "OPENAI_MODEL env var config (default gpt-4o)"
+  - "OPENAI_API_KEY required for real runs"
+  - "ELEVENLABS_API_KEY required for audio synthesis"
+  - "audio_enabled flag default=false"
+  - "Retry LLM calls 3 times with exponential backoff (0.5s)"
+artifacts:
+  - "prototype/readwise_audio/out_audio.metadata.json"
+  - "prototype/readwise_audio/debug_ui/provenance_viewer.html"
+requirements:
+  - id: "req:rail/railweb/readwise/ingest-highlights"
+    text: "The system SHALL ingest saved highlights and preserve provenance (author, source_title, exported_at, checksum)."
+    rationale: "Operators want a minimal pipeline to generate host scripts from highlights."
+    verification: "Inspection"
+    acceptance_criteria: "At least one highlight item is parsed with provenance fields present."
+  - id: "req:rail/railweb/readwise/dry-run-gating"
+    text: "The system SHALL support DRY_RUN operation that skips network calls and audio synthesis."
+    rationale: "Safe local testing without API keys or charges."
+    verification: "Demonstration"
+    acceptance_criteria: "When DRY_RUN=1, no external requests occur and audio_generated=false."
+  - id: "nfr:rail/railweb/readwise/retry-backoff"
+    text: "The system SHALL retry LLM API calls up to 3 times with exponential backoff starting at 0.5s."
+    rationale: "Improves resilience against transient errors."
+    verification: "Analysis"
+    acceptance_criteria: "Logs show at most 3 retries with backoff of 0.5, 1.0, 2.0 seconds."
+acceptance_criteria:
+  - "Provenance preserved for 100% of highlights."
+  - "Dry-run produces deterministic outputs without API calls."
+provenance:
+  source: "handoff/requirements-to-planner-architect.md"
+  source_commit: "abc1234"
+  run_id: "run-2025-09-18-railweb-local-sample"
+  date_synced: "2025-09-18T00:00:00Z"
+contacts:
+  - "Requirements Engineer (SysML v2)"
+  - "Project Planner GPT"
+  - "Architect GPT"
+notes: "This golden example is intended for schema validation in CI. Expand requirements list as the backlog grows."
