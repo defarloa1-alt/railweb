@@ -1,0 +1,54 @@
+name: Enforce GPT Preview Checklist
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+    paths:
+      - "handoff/**"
+      - "intake/**"
+      - "runs/**"
+      - "openapi/**"
+      - "mirror/**"
+      - ".github/**"
+      - "**/Requirements Engineer (SysML v2)"
+      - "**/*.gpt.md"
+
+jobs:
+  enforce-checklist:
+    name: Ensure GPT preview checklist updated
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Detect changed files
+        id: diff
+        run: |
+          base="${{ github.event.pull_request.base.sha }}"
+          head="${{ github.event.pull_request.head.sha }}"
+          git diff --name-only "$base" "$head" > changed.txt
+          echo "Changed files:"
+          cat changed.txt
+
+      - name: Determine if GPT-related files changed
+        id: gpt_changed
+        run: |
+          if grep -Eq '^(handoff/|intake/|runs/|openapi/|mirror/|\.github/|.*Requirements Engineer \(SysML v2\).*$|.*\.gpt\.md$)' changed.txt; then
+            echo "changed=true" >> $GITHUB_OUTPUT
+          else
+            echo "changed=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Ensure checklist updated when GPT-related changes occur
+        if: steps.gpt_changed.outputs.changed == 'true'
+        run: |
+          if grep -q '^handoff/GPT-preview-checklist.md$' changed.txt; then
+            echo "Checklist updated ✅"
+          else
+            echo "::error title=Missing checklist update::GPT-related changes detected but handoff/GPT-preview-checklist.md not updated."
+            echo "Please preview, capture the last session context, and update the checklist."
+            exit 1
+          fi
