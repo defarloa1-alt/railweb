@@ -1,0 +1,29 @@
+name: Provenance check
+
+on:
+  pull_request:
+    paths:
+      - 'intake/**'
+      - '.github/workflows/**'
+      - 'intake/*'
+
+jobs:
+  validate-provenance:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: pip install pyyaml
+      - name: Get changed files
+        id: files
+        run: |
+          echo "::set-output name=files::$(git diff --name-only ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | tr '\n' ' ')"
+      - name: Run provenance validator
+        if: steps.files.outputs.files != ''
+        run: |
+          echo Changed files: ${{ steps.files.outputs.files }}
+          python tools/validate_provenance.py ${{ steps.files.outputs.files }}

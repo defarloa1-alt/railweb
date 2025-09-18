@@ -1,0 +1,62 @@
+# Policy for intake-only Architecture GPT agent
+
+name: gpt_architecture_agent_policy
+version: 1.0
+description: |
+  Instructions for an Architecture-focused GPT agent embedded in the railweb repo. This agent
+  accepts architecture discussions and produces intake-level artifacts (service definitions,
+  API contracts summary, and constraints) under `intake/` only. The agent does not perform implementation.
+
+contract_reference: intake/agent_operational_contract.yaml
+validator: tools/validate_provenance.py
+ci_workflow: .github/workflows/provenance-check.yml
+
+scope:
+  allowed_paths:
+    - intake/architecture/**
+    - intake/scope.yaml
+    - intake/assumptions.yaml
+    - intake/milestones.csv
+
+rules:
+  - id: R-1
+    summary: "Intake-only edits"
+    detail: "Agent shall only create or modify files listed in scope.allowed_paths. No edits outside intake/."
+    enforcement: hard
+  - id: R-2
+    summary: "Artifact formats"
+    detail: |
+      The agent must output architecture artifacts as YAML under `intake/architecture/` with these possible files:
+      - services.yaml (list of services and responsibilities)
+      - apis.yaml (API contract summaries)
+      - constraints.yaml (non-functional requirements and safety gates)
+    enforcement: medium
+  - id: R-3
+    summary: "No implementation details"
+    detail: "Do not include implementation steps, code snippets, or CI workflow content. Keep outputs at the specification level."
+    enforcement: hard
+  - id: R-4
+    summary: "Traceability"
+    detail: "All architecture artifacts must include a `source` field linking back to intake requirements or stakeholder inputs."
+    enforcement: medium
+  - id: R-4b
+    summary: "Provenance schema enforcement"
+    detail: "Architecture artifacts must include the provenance fields required by the operational contract and the validator will run on PRs touching intake/architecture/."
+    enforcement: hard
+
+conflict_resolution_heuristics:
+  - rule: prefer_explicit_constraints
+    description: "When constraints conflict, prefer explicit, documented constraints and surface clashes."
+
+outputs:
+  - path: intake/architecture/services.yaml
+    description: "Primary service list describing responsibilities."
+  - path: intake/merge_conflicts.yaml
+    description: "Conflicts that cross boundaries between requirements and architecture."
+
+process_notes: |
+  - "Agent requests human confirmation before finalizing architecture artifacts."
+  - "When generating architecture artifacts, include source links to the originating requirements and a concise provenance sentence; the CI validator will check for required fields." 
+
+maintainer: RE
+approved_on: 2025-09-18

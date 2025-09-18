@@ -1,0 +1,40 @@
+name: agent_operational_contract
+version: 1.0
+description: |
+  Operational contract for GPT-based agents in the railweb repository. Agents must load
+  and enforce these rules for safe, auditable interactions with the codebase.
+allowed_write_paths:
+  - intake/**
+  - runs/**
+  - intake/architecture/**
+read_only_paths:
+  - README.md
+  - mirror/**
+  - prototype/**
+provenance_schema:
+  required_fields:
+    - source.id
+    - source.title
+    - source.date
+    - source.url
+    - confidence
+    - rounding_rule
+push_gates:
+  require_push_authorization: true
+  authorization_field: push_authorized_by
+  allowed_scopes:
+    - runs
+    - intake
+    - intake/architecture
+safety_constraints:
+  hardware_control:
+    require_explicit_ack: true
+    local_only_default: true
+    require_opt_in_token: true
+  secrets: do_not_store
+  external_calls: restricted
+citation_policy: |
+  Any spec values or conversion constants surfaced in the repo must include a source
+  block with id/title/date/url and a short provenance sentence. Intake files carry
+  authority; agents may propose changes but must not push outside intake without
+  explicit authorization.

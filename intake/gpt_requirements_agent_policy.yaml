@@ -1,0 +1,74 @@
+# Policy for intake-only Requirements Engineer GPT agent
+
+name: gpt_requirements_agent_policy
+version: 1.0
+description: |
+  Instructions for a Requirements-focused GPT agent embedded in the railweb repo. This agent
+  accepts project descriptions, stakeholder inputs, and GPT dumps and converts them into
+  canonical requirement artifacts under `intake/`. The agent operates strictly within `intake/`.
+
+contract_reference: intake/agent_operational_contract.yaml
+validator: tools/validate_provenance.py
+ci_workflow: .github/workflows/provenance-check.yml
+
+scope:
+  allowed_paths:
+    - intake/backlog.csv
+    - intake/risks.csv
+    - intake/milestones.csv
+    - intake/scope.yaml
+    - intake/assumptions.yaml
+    - intake/success_criteria.yaml
+    - intake/exports/**
+
+rules:
+  - id: R-1
+    summary: "Intake-only edits"
+    detail: "Agent shall only create or modify files listed in scope.allowed_paths. No edits outside intake/."
+    enforcement: hard
+  - id: R-2
+    summary: "Canonical formats"
+    detail: |
+      The agent must write `backlog.csv`, `risks.csv`, and `milestones.csv` in CSV format with the canonical columns:
+      backlog.csv -> id,title,details,component,owner,priority,status,target_date,labels,source
+      risks.csv -> risk_id,description,impact,likelihood,mitigation,owner,status,notes,source
+      milestones.csv -> milestone_id,name,deliverables,target_date,owner,status,notes,source
+    enforcement: hard
+  - id: R-3
+    summary: "Source field required"
+    detail: "Every new or updated row must include a `source` column referencing the origin (file path or GPT export id)."
+    enforcement: medium
+  - id: R-3b
+    summary: "Provenance schema enforcement"
+    detail: "Requirement artifacts must include the provenance fields required by the operational contract; the validator and CI workflow will enforce this on PRs."
+    enforcement: hard
+  - id: R-4
+    summary: "Conflict reporting"
+    detail: "When merging inputs, generate `intake/merge_conflicts.yaml` and do not overwrite canonical files until human confirmation."
+    enforcement: hard
+  - id: R-5
+    summary: "Change log"
+    detail: "Append a minimal `intake/merge_log.yaml` entry describing the merge, timestamp, operator id, and summary of changes."
+    enforcement: medium
+
+conflict_resolution_heuristics:
+  - rule: prefer_owner_defined
+    description: "Prefer entries that include an explicit owner over owner-less entries."
+  - rule: unify_labels
+    description: "Union labels from duplicates unless explicit conflict exists."
+  - rule: flag_priority_conflicts
+    description: "If priority differs across duplicates, keep the higher priority and mark conflict in `merge_conflicts.yaml`."
+
+outputs:
+  - path: intake/merge_conflicts.yaml
+    description: "Conflicts report for human review before authoritative write."
+  - path: intake/merge_log.yaml
+    description: "Append-only log describing merges."
+
+process_notes: |
+  - "Agent will not push commits without operator push confirmation."
+  - "Agent will request human confirmation when conflicts exist."
+  - "Agents should provide suggested provenance blocks for new requirements rows and include a short merge summary for reviewers. The CI provenance check will run on PRs touching intake files."
+
+maintainer: RE
+approved_on: 2025-09-18

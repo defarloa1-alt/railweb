@@ -1,0 +1,57 @@
+# Merged backlog generated from GPT dumps and manual review
+# Fields: id, title, details, component, owner, priority, status, target_date, labels, source_files
+
+- id: BL-001
+  title: Create GPT preview checklist
+  details: "Add handoff/GPT-preview-checklist.md with the provided template text."
+  component: governance
+  owner: RE
+  priority: High
+  status: Todo
+  target_date: 2025-09-19
+  labels: [checklist, docs]
+  source_files: [take/backlog.csv]
+
+- id: BL-002
+  title: Add PR template snippet
+  details: "Ensure .github/pull_request_template.md includes GPT patch checklist section."
+  component: ci
+  owner: RE
+  priority: High
+  status: Todo
+  target_date: 2025-09-19
+  labels: [pr-template, docs]
+  source_files: [take/backlog.csv]
+
+- id: BL-003
+  title: Enforce checklist in CI
+  details: "Add .github/workflows/enforce-gpt-preview-checklist.yml to fail PRs when checklist not updated for GPT-related changes."
+  component: ci
+  owner: RE
+  priority: High
+  status: Todo
+  target_date: 2025-09-19
+  labels: [workflow, quality-gate]
+  source_files: [take/backlog.csv]
+
+- id: BL-004
+  title: Optional: validate handoff schema
+  details: "Add .github/workflows/validate-handoff.yml using ajv-cli and yq to validate handoff JSON/YAML."
+  component: ci
+  owner: RE
+  priority: Medium
+  status: Todo
+  target_date: 2025-09-22
+  labels: [workflow, validation]
+  source_files: [take/backlog.csv]
+
+- id: BL-005
+  title: Add 'Show CI policy' shortcut
+  details: "Expose a shortcut/command to print CI policy snippet on demand."
+  component: ux
+  owner: RE
+  priority: Low
+  status: Todo
+  target_date: 2025-09-23
+  labels: [shortcuts, docs]
+  source_files: [take/backlog.csv]
