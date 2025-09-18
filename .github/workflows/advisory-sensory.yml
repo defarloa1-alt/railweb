@@ -1,0 +1,30 @@
+name: Advisory - Sensory PR Notes
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize]
+
+jobs:
+  advisory:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Find changed files
+        id: changes
+        run: |
+          git fetch --no-tags --prune --depth=1 origin ${{ github.base_ref }}
+          echo "changed_files<<EOF" >> $GITHUB_OUTPUT
+          git diff --name-only origin/${{ github.base_ref }}...${{ github.sha }}
+          echo "EOF" >> $GITHUB_OUTPUT
+      - name: Comment advisory if relevant
+        if: contains(steps.changes.outputs.changed_files, 'prototype/readwise_audio') || contains(steps.changes.outputs.changed_files, 'tools/')
+        uses: peter-evans/create-or-update-comment@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            Heads-up: this PR touches sensory/audio or tool files. Please ensure:
+            - Any hardware or external API calls are gated behind opt-in flags.
+            - Provenance metadata is included for generated artifacts.
+            - Secrets (API keys) are not committed and are used via secrets or env vars.

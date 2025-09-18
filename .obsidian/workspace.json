@@ -1,0 +1,234 @@
+{
+  "main": {
+    "id": "dcb2f3a95d0cc88a",
+    "type": "split",
+    "children": [
+      {
+        "id": "bc1eae2afa02857c",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "a2235005db0fe255",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "intake/Requirements for Scale Converter.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "Requirements for Scale Converter"
+            }
+          },
+          {
+            "id": "e501bcf8f44faf2c",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "intake/Requirements for Scale Converter.md",
+                "mode": "source",
+                "source": true
+              },
+              "icon": "lucide-file",
+              "title": "Requirements for Scale Converter"
+            }
+          }
+        ],
+        "currentTab": 1
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "3a7c97a6833d9da9",
+    "type": "split",
+    "children": [
+      {
+        "id": "0efffc5e92aa49e7",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "d2ed3d050f95f768",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
+            }
+          },
+          {
+            "id": "0503f2fcd30dfab8",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Search"
+            }
+          },
+          {
+            "id": "55ac8a40fd5d99da",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "d6a01024e720edff",
+    "type": "split",
+    "children": [
+      {
+        "id": "24280667c41ded44",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "583888c5a71860c2",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks"
+            }
+          },
+          {
+            "id": "ce6aa5cbdcbd396c",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links"
+            }
+          },
+          {
+            "id": "7b0651521a84b2cc",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
+            }
+          },
+          {
+            "id": "a46673a9c54f2e54",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Outline"
+            }
+          },
+          {
+            "id": "cef3850e47ddcd8d",
+            "type": "leaf",
+            "state": {
+              "type": "juggl_nodes",
+              "state": {},
+              "icon": "ag-node-list",
+              "title": "Juggl nodes"
+            }
+          },
+          {
+            "id": "328f33a67bb35df3",
+            "type": "leaf",
+            "state": {
+              "type": "juggl_style",
+              "state": {},
+              "icon": "ag-style",
+              "title": "Juggl style"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false,
+      "bases:Create new base": false,
+      "juggl:Juggl global graph": false,
+      "mermaid-tools:Open Mermaid Toolbar": false,
+      "templater-obsidian:Templater": false,
+      "note_uid_generator:Create uid if missing": false
+    }
+  },
+  "active": "e501bcf8f44faf2c",
+  "lastOpenFiles": [
+    "tools/__pycache__/yaml_to_md.cpython-312.pyc",
+    "tests/__pycache__/test_yaml_to_md.cpython-312-pytest-8.4.2.pyc",
+    "tools/__pycache__/parse_kerml.cpython-312.pyc",
+    "tools/__pycache__",
+    "tests/__pycache__/test_parse_kerml.cpython-312-pytest-8.4.2.pyc",
+    "prototype/readwise_audio/out_audio.metadata.json",
+    "tests/test_yaml_to_md.py",
+    "tests/test_parse_kerml.py",
+    "tests/__pycache__/test_prompt.cpython-312-pytest-8.4.2.pyc",
+    "tests/__pycache__/test_fetcher.cpython-312-pytest-8.4.2.pyc",
+    "tests/__pycache__",
+    "CONTRIBUTING.md",
+    "SECURITY.md",
+    "README.md",
+    "docs/Sensory-DevOps-Manifesto.md",
+    "prototype/readwise_audio/README.md",
+    "tools/README.md",
+    "intake/README.md",
+    "intake/exports/requirements_8ad06a3.md",
+    "intake/templates/requirement_request_template.md",
+    "intake/requests/requirement_request_scale_converter.md",
+    "intake/use case for obsidian.md",
+    "intake/Requirements for Scale Converter.md"
+  ]
+}

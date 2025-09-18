@@ -1,0 +1,172 @@
+/* YAML Table プラグインのスタイル */
+
+/* 基本テーブルスタイル (.yaml-table が適用された最上位のテーブル) */
+.yaml-table {
+  border-collapse: collapse;
+  /* Allow the table to expand beyond the container when needed */
+  width: max-content;
+  min-width: 100%;
+  margin: 0; /* 上下左右のマージンを削除 */
+  font-size: 0.9em;
+  border: 1px solid var(--background-modifier-border, #e0e0e0); /* Obsidianの枠線色変数を使用 */
+  border-radius: 4px;
+  overflow: hidden; /* ボーダー半径を適用するため */
+  background-color: var(--background-primary, #ffffff); /* Obsidianの背景色変数を使用 */
+}
+
+/* 全てのテーブルセル (th, td) の基本スタイル */
+.yaml-table th,
+.yaml-table td {
+  padding: 8px 12px;
+  border: 1px solid var(--background-modifier-border, #e0e0e0);
+  text-align: left;
+  vertical-align: top;
+  color: var(--text-normal, #333333); /* Obsidianの文字色変数を使用 */
+  background-color: transparent; /* 基本は透過、必要な箇所で上書き */
+}
+
+/* テーブルヘッダーセル (th) の共通スタイル */
+.yaml-table th {
+  font-weight: bold;
+  background-color: var(--background-secondary-alt, hsl(var(--accent-h), 60%, 95%)) !important; /* !important を追加 */
+  color: var(--text-muted, hsl(var(--accent-h), 15%, 40%)); /* アクセント基準の少し濃い色かMuted */
+}
+
+
+/* ネストしたテーブルのスタイル (.yaml-table の中にある table) */
+.yaml-table table {
+  width: 100%;
+  margin: 4px 0; /* ネストしたテーブルの上下に少しマージンを追加 */
+  border: 1px solid var(--background-modifier-border, #e0e0e0); /* ネストしたテーブルに外枠を追加 */
+  border-collapse: collapse;
+  border-radius: 0; /* ネストしたテーブルは角丸なし */
+  overflow: visible;
+  background-color: transparent; /* 親セルの背景を継承 */
+}
+
+/* ネストしたテーブル内のセル (th, td) のスタイル調整 */
+.yaml-table table th,
+.yaml-table table td {
+  padding: 6px 10px; /* 少しパディングを狭く */
+  border: 1px solid var(--background-modifier-border, #e0e0e0); /* セルに上下左右の罫線を追加 */
+  background-color: transparent; /* 基本は透過 */
+  color: var(--text-normal, #333333); /* 文字色は通常 */
+}
+
+/* ネストしたテーブルのヘッダーセル (th) */
+.yaml-table table th {
+    /* font-weight: bold; は継承されるはず */
+    color: var(--text-muted, hsl(var(--accent-h), 15%, 40%)); /* 文字色は少し抑えめに */
+}
+
+/* ネストしたオブジェクト配列テーブルのヘッダー (thead th) */
+.yaml-table td > table > thead > tr > th {
+    background-color: var(--background-secondary-alt, hsl(var(--accent-h), 60%, 95%)) !important; /* !important を追加 */
+    color: var(--text-muted, hsl(var(--accent-h), 15%, 40%)); /* 文字色も念のため指定 */
+    /* border-color と border-style も明示的に指定してみる (オプション) */
+    /* border-color: var(--background-modifier-border, #e0e0e0); */
+    /* border-style: solid; */
+    /* border-width: 1px; */
+}
+
+/* ネストしたオブジェクトテーブルのキー列ヘッダー (tbody th[scope="row"]) */
+.yaml-table table tbody th[scope="row"] {
+    background-color: var(--background-secondary-alt, hsl(var(--accent-h), 60%, 95%)) !important; /* !important を追加 */
+    color: var(--text-muted, hsl(var(--accent-h), 15%, 40%)); /* 文字色も念のため指定 */
+    /* border-color と border-style も明示的に指定してみる (オプション) */
+    /* border-color: var(--background-modifier-border, #e0e0e0); */
+    /* border-style: solid; */
+    /* border-width: 1px; */
+}
+
+/* ネストしたテーブルの最後の行の下線を消す */
+.yaml-table table tr:last-child th,
+.yaml-table table tr:last-child td {
+  border-bottom: none;
+}
+
+/* リストのスタイル */
+.yaml-table ul,
+.yaml-table ol {
+  margin: 4px 0; /* td直下リストのマージン */
+  padding-left: 0; /* 余計なインデントを除去 */
+  list-style-position: inside;
+}
+.yaml-table ul li,
+.yaml-table ol li {
+  margin-bottom: 2px;
+}
+/* ネストしたリストの調整 */
+.yaml-table ul ul,
+.yaml-table ul ol,
+.yaml-table ol ol,
+.yaml-table ol ul {
+  margin: 2px 0; /* 上下マージンを維持し左インデントを削除 */
+}
+
+/* エラーメッセージのスタイル */
+.yaml-table-error {
+  color: var(--text-error, #d32f2f);
+  padding: 10px;
+  border: 1px solid var(--background-error, #ffcdd2);
+  border-radius: 4px;
+  background-color: var(--background-primary-alt, #ffebee); /* 少し背景色をつける */
+  margin: 1em 0;
+}
+
+/* テーブルコンテナ */
+.yaml-table-container {
+  cursor: default;
+  margin-bottom: 1em; /* コードブロック下の要素との間隔 */
+  /* Enable horizontal scrolling when the table exceeds the viewport width */
+  overflow-x: auto;
+}
+
+/* テーブルキャプションのスタイル */
+.yaml-table-caption {
+  text-align: center;
+  font-weight: bold;
+  padding: 8px 0 0 0;
+  margin-bottom: 0px; /* キャプションとテーブルの間のマージンを調整 */
+  color: var(--text-normal, #333333);
+  font-size: 1.1em; /* 少し大きめのフォントサイズ */
+}
+
+/* MarkdownRendererによって生成されるpタグのマージンを調整 */
+.yaml-table td p,
+.yaml-table th p,
+.yaml-table li p {
+  margin: 0;
+  display: inline; /* 箇条書きの記号と内容を同じ行に表示する */
+}
+
+/* --- テーマ別調整 --- */
+
+/* ライトテーマ時のテーブルヘッダー背景色調整 */
+.theme-light .yaml-table th,
+.theme-light .yaml-table td > table > thead > tr > th,
+.theme-light .yaml-table table tbody th[scope="row"] {
+  /* 元の hsl(var(--accent-h), 60%, 95%) より少し濃くするために輝度を調整 */
+  /* var(--accent-s) が未定義の場合のフォールバックとして 60% を使用 */
+  background-color: color-mix(in srgb, var(--background-secondary-alt) 95%, black) !important;
+}
+
+/* ダークテーマ時のテーブル枠線・罫線色調整 */
+.theme-dark .yaml-table,
+.theme-dark .yaml-table th,
+.theme-dark .yaml-table td,
+.theme-dark .yaml-table table, /* ネストしたテーブルの枠線も含む */
+.theme-dark .yaml-table table th,
+.theme-dark .yaml-table table td {
+  /* thの背景色 (例: --background-secondary-alt のダークテーマ時の値) より明るく見えるように調整 */
+  /* 安全策として、半透明の白を使用 */
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+/*
+  注意:
+  - ダークテーマ時の `th` の背景色は `var(--background-secondary-alt)` がテーマによって適切に暗くなることを期待しています。
+    もし `th` の背景色が明るすぎる、または暗すぎる場合は、`.theme-dark .yaml-table th` などに対して `background-color` を別途指定する必要があります。
+  - `border-color` の変更は、`border` プロパティ全体を上書きしないように注意が必要です。
+    元のスタイルが `border: 1px solid var(...)` なので、`border-color` のみの変更で問題ないはずです。
+*/

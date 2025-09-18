@@ -1,0 +1,7 @@
+# Default owners
+* @defarloa1-alt
+
+# Owners for prototype and workflows
+prototype/readwise_audio/ @defarloa1-alt
+tools/ @defarloa1-alt
+tools/n8n_workflows/ @defarloa1-alt
