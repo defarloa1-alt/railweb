@@ -6,6 +6,11 @@ Summary
 
 Provide a one-line summary of the change and reference the relevant milestone from `intake/milestones.csv` (e.g., "M3 Scale Converters MVP").
 
+GPT Preview Reminder
+--------------------
+
+- If this PR includes changes to GPT or automation-related files (see `handoff/`, `mirror/`, `intake/`, `tools/`), attach or update `handoff/GPT-preview-checklist.md` with the last session context before merging.
+
 PR Summary
 
 - [ ] **Three-line architecture summary included**
