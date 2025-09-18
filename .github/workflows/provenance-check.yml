@@ -27,3 +27,8 @@ jobs:
         run: |
           echo Changed files: ${{ steps.files.outputs.files }}
           python tools/validate_provenance.py ${{ steps.files.outputs.files }}
+      - name: Enforce push authorization
+        if: steps.files.outputs.files != ''
+        run: |
+          echo Changed files: ${{ steps.files.outputs.files }}
+          python tools/check_push_authorization.py ${{ steps.files.outputs.files }}
