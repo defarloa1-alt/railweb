@@ -1,3 +1,24 @@
+<!-- Pull Request template for PRs created by Copilot or other agents -->
+
+# Pull Request Template for railweb
+
+## Summary
+
+Describe the change in one sentence.
+
+## Why this change is needed
+
+Brief rationale and link to issue.
+
+## Reviewer checklist (required for Copilot PRs)
+
+- [ ] Branch name begins with `copilot/` (if created by Copilot)
+- [ ] `tools/validate_provenance.py` passes (provenance block present and correct)
+- [ ] Unit tests / linters pass in CI
+- [ ] No secrets or sensitive data included
+- [ ] At least one independent reviewer has been requested
+
+If you're satisfied, click "Approve and run workflows" to let the remaining Actions execute.
 # Pull Request Template for railweb
 
 Summary
