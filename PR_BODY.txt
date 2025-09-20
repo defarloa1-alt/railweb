@@ -1,0 +1,54 @@
+PR title: Add ingest scaffold, strict schemas, validator and Notion/schema quick-check workflow
+
+Summary
+- Adds JSON schemas for intake, provenance, and requirements output.
+- Adds an ingest pipeline scaffold: `tools/ingest_pipeline.py` (discover → validate → emit; dry-run + audit).
+- Reworked `tools/validate_provenance.py` to perform JSON Schema validation with a CLI.
+- Adds unit/smoke tests:
+  - `tests/test_schemas.py`
+  - `tests/test_ingest_pipeline.py`
+  - `tests/test_validate_provenance.py`
+  - `tests/test_notion_dryrun.py`
+- Adds a lightweight GitHub Actions workflow `.github/workflows/notion-schema-check.yml` that runs the schema/validator tests and Notion dry-run on PRs (no secrets required).
+- Adds a README badge for the quick-check workflow.
+- Removes a temporary artifact `tmp_notion_table.md`.
+
+Why
+- Provide early validation of intake files and provenance using JSON Schemas.
+- Add a small ingest scaffold and tests so we can iterate safely.
+- Add a fast PR check (Notion dry-run + schema tests) to catch regressions early.
+
+Files changed (high level)
+- schema/intake.schema.json
+- schema/provenance.schema.json
+- schema/requirements.schema.json
+- tools/ingest_pipeline.py
+- tools/validate_provenance.py
+- tools/run-python.cmd
+- tools/run-python.ps1
+- tests/test_schemas.py
+- tests/test_ingest_pipeline.py
+- tests/test_validate_provenance.py
+- tests/test_notion_dryrun.py
+- .github/workflows/notion-schema-check.yml
+- README.md (badge)
+
+Local test results (from dev venv)
+- Ran full test suite: all tests passed.
+
+Notes for reviewers
+- The schemas are intentionally strict; after review we can relax fields that are not universally present in intake files.
+- The Notion dry-run uses bundled sample response; no secrets are required.
+
+How to validate locally (quick)
+- Activate venv and run:
+  python -m pytest -q
+
+
+---
+
+Reviewer checklist
+- [ ] Schemas align with intake files in `intake/`.
+- [ ] Ingest pipeline emits expected artifacts when run without `--dry-run`.
+- [ ] CI badge and workflow are acceptable to maintainers.
+- [ ] Tests and linters pass in CI.

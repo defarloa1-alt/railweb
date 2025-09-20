@@ -48,3 +48,15 @@ Update process
 --------------
 
 Always update the `.md` and regenerate the `.yaml`/`.json` in the same commit to keep them in sync.
+
+Agent handoffs
+--------------
+
+The repository also contains AI assistant handoff artifacts that document automated changes and
+agent-visible entry points. Recent agent handoffs include:
+
+- `railweb_agent_handoff_v20250919.yaml` / `railweb_agent_handoff_v20250919.md`
+- `railweb_agent_handoff_v20250920.yaml` / `railweb_agent_handoff_v20250920.md`  (notes updates on orchestrator and Notion materializer)
+
+When switching threads or accepting an automated change, review these handoff packets for
+entry points, required env vars, and operational notes.

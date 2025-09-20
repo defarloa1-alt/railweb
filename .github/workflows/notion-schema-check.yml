@@ -1,0 +1,31 @@
+name: Notion & Schema Quick Checks
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  quick-checks:
+    runs-on: ubuntu-latest
+    permissions: read-all
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run schema & validator tests
+        run: |
+          python -m pytest -q tests/test_schemas.py tests/test_validate_provenance.py
+
+      - name: Run Notion dry-run test
+        run: |
+          python -m pytest -q tests/test_notion_dryrun.py

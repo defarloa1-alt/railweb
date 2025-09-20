@@ -1,0 +1,11 @@
+```yaml
+name: railweb-agent-handoff
+version: 2025-09-20
+entry_points:
+  - tools/debate/generate_debate_insights.py
+  - tools/orchestrate/linear_integration.py
+  - .github/scripts/notion_to_md.py
+notes: |
+  Includes debate tooling, orchestrator integrations (Linear + GitHub fallback), and the Notion->README materializer.
+  Tests and CI updates were added to cover orchestrator flows.
+```

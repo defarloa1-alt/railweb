@@ -124,6 +124,20 @@ rounding_rule: "none"
 4. If you need the Perplexity key entirely removed from history, schedule a git-history cleanup with the team.
 5. Wire the Perplexity provider in `tools/llm_adapter/` using the official API and ensure keys are stored in CI/secret stores (not in files).
 
+## Delta: 2025-09-20
+
+On 2025-09-20 the following changes were merged into `main` and should be noted by maintainers and planners:
+
+- Orchestrator additions: `tools/orchestrate/github_integration.py` (GitHub Issues fallback) and updates to `tools/orchestrate/linear_integration.py` to use a fallback when `LINEAR_API_KEY` is absent. These changes enable issue creation via GitHub when Linear credentials are not available.
+- Notion materializer: `.github/scripts/notion_to_md.py` and `.github/workflows/update-table.yml` were added to support materializing Notion databases into `README.md` files; the script includes a dry-run mode and debug logging.
+- Tests: Unit tests were added/updated to cover the orchestrator flows and fallback behavior.
+
+Recommended immediate actions:
+
+- Add a short section to `handoff/README.md` or `tools/orchestrate/README.md` describing the orchestrator entrypoints and required env vars (`LINEAR_API_KEY`, `LINEAR_TEAM_ID`, `GITHUB_TOKEN`, `GITHUB_REPOSITORY`).
+- If you run the Notion materializer in CI, ensure `NOTION_TOKEN` and `NOTION_DB_ID` are provisioned securely and that live runs are gated with an approval step (safety-first).
+
+
 ## Contact / follow-up
 
 If you'd like, I can:

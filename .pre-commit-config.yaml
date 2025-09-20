@@ -1,4 +1,11 @@
 repos:
+  - repo: local
+    hooks:
+      - id: check-conflict-markers
+        name: Check for merge conflict markers
+        entry: python tools/check_conflicts.py
+        language: python
+        files: ''
   - repo: https://github.com/psf/black
     rev: 24.1.0
     hooks:

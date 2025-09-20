@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Railweb Provenance",
+  "type": "object",
+  "required": ["run_id", "git_sha", "created_at", "tool_versions"],
+  "properties": {
+    "run_id": {"type": "string"},
+    "git_sha": {"type": "string", "minLength": 7},
+    "created_at": {"type": "string", "format": "date-time"},
+    "tool_versions": {
+      "type": "object",
+      "required": ["ingest_pipeline"],
+      "additionalProperties": {"type": "string"}
+    },
+    "environment": {"type": "object"},
+    "notes": {"type": "string"}
+  },
+  "additionalProperties": false
+}

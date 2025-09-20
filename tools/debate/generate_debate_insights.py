@@ -94,7 +94,6 @@ def parse_insights_from_adapter_response(data: Dict[str, Any]) -> Dict[str, Any]
     raise ValueError('No parseable JSON found in adapter response')
 
 
-<<<<<<< HEAD
 def _parse_score_value(raw: Any) -> float:
     """Normalize a score value into a float in the range [0.0, 1.0].
 
@@ -149,9 +148,6 @@ def _parse_score_value(raw: Any) -> float:
         raise ValueError('score must be between 0.0 and 1.0')
 
     raise ValueError('score must be a number between 0.0 and 1.0')
-
-=======
->>>>>>> origin/main
 def validate_insights(insights: Dict[str, Any]) -> None:
     """Validate the parsed insights shape and value ranges.
 

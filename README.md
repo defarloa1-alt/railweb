@@ -1,5 +1,7 @@
 # railweb
 
+[![Notion & Schema Quick Checks](https://github.com/defarloa1-alt/railweb/actions/workflows/notion-schema-check.yml/badge.svg)](https://github.com/defarloa1-alt/railweb/actions/workflows/notion-schema-check.yml)
+
 ## Overview
 
 **railweb** is an open-source web system for model railroaders. It provides authoritative, source-cited reference data, smart converters, beginner through advanced guides, and modern control and planning tools for the global model railroading community.
@@ -104,6 +106,7 @@ python run_pipeline.py --no-dry-run --audio
 ```
 
 Notes:
+
 - The prototype is opt-in for external API calls. Use `--no-dry-run` to allow real calls, and set `ELEVENLABS_API_KEY` (and other keys) via environment variables.
 - Provenance metadata is written to `out_audio.metadata.json` when the prototype runs.
 
@@ -115,13 +118,4 @@ MIT (see `LICENSE`)
 
 Project owner: Tony DeFarlo
 File an issue or open a discussion for questions.
-# railweb
-
-Railweb is a collection of reference material, converters, and prototypes for model-railroad hobbyists and tooling.
-
-This repository includes a small prototype for Readwise→Audio enrichment and a Sensory DevOps manifesto describing principles for observable, auditable multi-sensory pipelines.
-
-- Sensory DevOps Manifesto: `docs/Sensory-DevOps-Manifesto.md`
-- Prototype: `prototype/readwise_audio/`
-
 See `tools/README.md` for utilities and `.github/pull_request_template.md` for PR guidance.
