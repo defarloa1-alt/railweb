@@ -1,0 +1,5 @@
+This is a placeholder file created via GitHub UI.
+
+This file demonstrates how to add a new file to a GitHub repository using the web interface.
+
+Content can be added here as needed.

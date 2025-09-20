@@ -19,7 +19,6 @@
 | Task B | In Progress | Work ongoing   |
 
 <!--TABLE:END-->
-
 ## Features
 
 - **Reference Library**: Specs and how-tos, tightly sourced and date/version stamped.

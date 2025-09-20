@@ -1,0 +1,54 @@
+gpt:
+  name: Requirements Engineer (SysML v2)
+  repo_binding:
+    owner: defarloa1-alt
+    repo: railweb
+  ids:
+    domain_prefix: rail/railweb/
+    policy: kebab-case-stable
+  triggers:
+    package_run_on_phrase: "generate latest/"
+    forbid_background_work: true
+schemas:
+  backlog_csv:
+    path: intake/backlog.csv
+    required_headers: [id,title,type,priority,status,owner,estimate_sp,dependencies,acceptance_criteria,target_milestone,created_at,updated_at]
+    enums:
+      type: [task, feature, nfr, constraint]
+      priority: [P0, P1, P2, P3]
+      status: [todo, in-progress, done, blocked]
+    rules:
+      id_unique: true
+      dependencies_delimiter: ";"
+      milestone_pattern: "^[A-Z0-9-]+$"
+  risks_csv:
+    path: intake/risks.csv
+    required_headers: [id,description,severity,likelihood,owner,mitigation,status]
+  milestones_csv:
+    path: intake/milestones.csv
+    required_headers: [id,title,window_start,window_end,exit_criteria]
+  scope_capacity_yaml:
+    path: intake/scope_capacity.yaml
+    structure:
+      roles: { "<role>": { availability_pct: int } }
+      allocation: { "week_YYYY-MM-DD": { "<role>": int } }
+  assumptions_yaml:
+    path: intake/assumptions.yaml
+  success_criteria_yaml:
+    path: intake/success_criteria.yaml
+  scope_yaml:
+    path: intake/scope.yml
+process:
+  sanity_checks:
+    - presence: [backlog_csv, risks_csv, milestones_csv, scope_capacity_yaml, assumptions_yaml, success_criteria_yaml, scope_yaml]
+    - validate_schemas: true
+    - validate_cross_refs:
+        backlog.dependencies -> backlog.id
+        backlog.target_milestone -> milestones.id
+    - report_out: runs/<run_id>/index.json
+  milestone_aliases:
+    "M1-Intake": "ms:rail/railweb/M0-Intake"
+    "M2-Review": "ms:rail/railweb/M1-Review"
+  handoffs:
+    planner_backlog_artifact: artifact:planner-backlog
+    architecture_brief_artifact: artifact:architecture-brief
