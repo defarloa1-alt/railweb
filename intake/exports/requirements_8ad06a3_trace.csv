@@ -1,0 +1,37 @@
+req_id,short_text,source
+req:rail/railweb/feature/spec-library,"Provide a cited reference library of model railroading specifications and standards across target scales (N, HO, S, O, G, Z, TT).",intake/scope.yml@8ad06a3
+req:rail/railweb/feature/scale-conversion,Provide calculators to convert real-world measurements by selected model scale with documented rounding rules.,intake/scope.yml@8ad06a3
+req:rail/railweb/feature/guidance-themes,"Publish guidance for automation and scenery as structured, cited checklists.",intake/scope.yml@8ad06a3
+req:rail/railweb/feature/navigation-search,Provide basic navigation and search to locate specs and guides.,intake/scope.yml@8ad06a3
+req:rail/railweb/feature/realtime-control,"Provide local/network-limited real-time layout control (e.g., throttle, turnout/route actions) on documented interfaces.",intake/scope.yml@8ad06a3
+req:rail/railweb/feature/dcc-programming,Provide DCC CV read/write in service and ops modes with audit logging.,intake/scope.yml@8ad06a3
+req:rail/railweb/feature/sim-cad-integration,Provide import/export for at least one track-plan format and enable a basic virtual operating session.,intake/scope.yml@8ad06a3
+nfr:rail/railweb/content/completeness-20-specs,"At launch, publish ≥20 cited specification entries across target scales.",intake/success_criteria.yaml@8ad06a3
+nfr:rail/railweb/usability/findability-3-clicks,A named specification is discoverable in ≤3 clicks from the landing page.,intake/success_criteria.yaml@8ad06a3
+nfr:rail/railweb/quality/converter-accuracy,Scale conversion outputs match hand-checked results within documented rounding rules.,intake/success_criteria.yaml@8ad06a3
+cons:rail/railweb/safety/ack-gate-live-control,Display prominent safety cautions and require explicit user acknowledgement before enabling live control.,intake/scope.yml@8ad06a3
+cons:rail/railweb/security/local-only-v1,V1 excludes cloud-hosted remote operations; restrict to local/network-limited scope.,intake/scope.yml@8ad06a3
+cons:rail/railweb/compliance/licensing-attrib,"Honor content licensing and attributions; each value cites source name, version, and date.","intake/scope.yml, assumptions.yaml@8ad06a3"
+ms:rail/railweb/M0,Initiation & Intake approval,
+ms:rail/railweb/M1,IA & Content Map,
+ms:rail/railweb/M2,Spec Corpus Curation,
+ms:rail/railweb/M2A,Hardware & Protocol Inventory,
+ms:rail/railweb/M3,Scale Converters MVP,
+ms:rail/railweb/M4,Guidance Themes MVP,
+ms:rail/railweb/M4A,Real-time Control MVP,
+ms:rail/railweb/M4B,DCC Programming MVP,
+ms:rail/railweb/M4C,Simulation/CAD Integration MVP,
+ms:rail/railweb/M5,Beta Readiness,
+ms:rail/railweb/M6,Launch Baseline,
+risk:rail/railweb/R1,Standards usage rights/licensing may restrict reproduction,
+risk:rail/railweb/R2,Spec inaccuracies could misguide layouts,
+risk:rail/railweb/R3,Scale/standard variants create ambiguity,
+risk:rail/railweb/R4,Scope creep into tools/forums dilutes schedule,
+risk:rail/railweb/R5,Content curation slower than planned,
+risk:rail/railweb/R6,Unit confusion (metric/imperial) hurts usability,
+risk:rail/railweb/R7,Safety/liability concerns with live control,
+risk:rail/railweb/R8,Device/protocol fragmentation,
+risk:rail/railweb/R9,Latency/reliability issues degrade control,
+risk:rail/railweb/R10,Decoder CV differences complicate programming,
+risk:rail/railweb/R11,Licensing/format barriers for CAD/sim,
+risk:rail/railweb/R12,Security exposure if remote control expands,

@@ -1,0 +1,8 @@
+team:
+  name: railweb-core
+  capacity_per_sprint: 5
+constraints:
+  max_parallel_tasks: 3
+  max_story_points: 20
+notes: |
+  This is a minimal scope/capacity hint file for initial planner alignment. Adjust values according to team size.

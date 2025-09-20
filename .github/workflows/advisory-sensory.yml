@@ -1,0 +1,52 @@
+name: Advisory - Sensory PR Notes
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize]
+
+jobs:
+  advisory:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          # Make sure we have refs to compute diffs reliably
+          fetch-depth: 0
+      - name: Find changed files
+        id: changes
+        run: |
+          # Be liberal when fetching the base and head refs so three-dot diffs succeed.
+          # This avoids failures like "no merge base" when the repo was checked out shallowly
+          git fetch --no-tags --prune origin ${{ github.base_ref }} || true
+          # Also try to fetch the PR head (if present) so the head ref exists locally
+          if [ -n "${{ github.event.pull_request.number }}" ]; then
+            git fetch --no-tags --prune origin refs/pull/${{ github.event.pull_request.number }}/head || true
+          fi
+
+          # Always emit the GITHUB_OUTPUT block delimiters even if git diff fails.
+          echo "changed_files<<EOF" >> $GITHUB_OUTPUT
+          # Try a few fallbacks for computing the changed files. If none work, emit empty output.
+          git diff --name-only origin/${{ github.base_ref }}...${{ github.sha }} || \
+            git diff --name-only origin/${{ github.base_ref }}...${{ github.event.pull_request.head.sha }} || \
+            echo "" \
+            > /tmp/changed_files || true
+          # If previous commands wrote to stdout, capture them; otherwise read the temp file.
+          if [ -s /tmp/changed_files ]; then
+            cat /tmp/changed_files >> $GITHUB_OUTPUT
+          else
+            # Try to print the last successful diff output (if any), otherwise print nothing
+            git diff --name-only origin/${{ github.base_ref }}...${{ github.sha }} 2>/dev/null || true
+          fi
+          echo "EOF" >> $GITHUB_OUTPUT
+      - name: Comment advisory if relevant
+        if: contains(steps.changes.outputs.changed_files, 'prototype/readwise_audio') || contains(steps.changes.outputs.changed_files, 'tools/')
+        uses: peter-evans/create-or-update-comment@v2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            Heads-up: this PR touches sensory/audio or tool files. Please ensure:
+            - Any hardware or external API calls are gated behind opt-in flags.
+            - Provenance metadata is included for generated artifacts.
+            - Secrets (API keys) are not committed and are used via secrets or env vars.

@@ -1,0 +1,37 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Out Audio Metadata",
+  "type": "object",
+  "required": ["run_id", "generated_at", "llm", "tts_provider", "audio_generated", "highlights_provenance"],
+  "properties": {
+    "run_id": {"type": "string"},
+    "generated_at": {"type": "string", "format": "date-time"},
+    "llm": {"type": "object", "properties": {"model": {"type": "string"}}, "required": ["model"]},
+    "tts_provider": {"type": ["string", "null"]},
+    "audio_generated": {"type": "boolean"},
+    "audio_path": {"type": ["string", "null"]},
+    "highlights_provenance": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "title", "provenance"],
+        "properties": {
+          "id": {"type": ["string", "number", "null"]},
+          "title": {"type": ["string", "null"]},
+          "excerpt": {"type": ["string", "null"]},
+          "provenance": {
+            "type": "object",
+            "required": ["checksum"],
+            "properties": {
+              "author": {"type": ["string", "null"]},
+              "source_title": {"type": ["string", "null"]},
+              "doc_url": {"type": ["string", "null"]},
+              "exported_at": {"type": ["string", "null"]},
+              "checksum": {"type": ["string", "null"]}
+            }
+          }
+        }
+      }
+    }
+  }
+}

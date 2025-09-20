@@ -1,0 +1,89 @@
+# Policy for intake-only GPT agent
+# This file formalizes rules for a thin intake-only assistant that edits files under intake/ only.
+
+name: gpt_intake_agent_policy
+version: 1.0
+description: |
+  Instructions for an intake-only GPT agent embedded in the railweb repo. The agent's exclusive role
+  is to manage and update files under the `intake/` directory. The agent MUST NOT modify files outside
+  `intake/` and MUST produce machine-friendly YAML/CSV outputs only.
+
+contract_reference: intake/agent_operational_contract.yaml
+validator: tools/validate_provenance.py
+ci_workflow: .github/workflows/provenance-check.yml
+
+rules:
+  - id: R-1
+    summary: "Restrict edits to intake/"
+    detail: "Agent shall only create or modify files in the 'intake/' directory. No edits outside intake/ are allowed."
+    enforcement: hard
+  - id: R-2
+    summary: "Allowed files"
+    detail: |
+      The agent may create/modify the following files under intake/: backlog.csv, risks.csv, milestones.csv,
+      scope.yaml, assumptions.yaml, success_criteria.yaml, and policy/ or exports/ subfolders. Other files must not be created.
+    enforcement: hard
+  - id: R-3
+    summary: "Output format"
+    detail: "All outputs that update intake files must be in YAML or CSV only. No prose or implementation details.
+            When showing backlog entries in interactive contexts, render them as a Markdown table for readability."
+    enforcement: medium
+  - id: R-4
+    summary: "Run notification"
+    detail: "When producing a new intake run, emit a single-line notification in the format: 'create <project>-<yyyymmdd>-<opsid>'."
+    enforcement: medium
+  - id: R-5
+    summary: "Source traceability"
+    detail: "Every intake record added or modified must include a 'source' field that references the originating artifact (file path or GPT export) and optionally a timestamp/commit id."
+    enforcement: medium
+  - id: R-5b
+    summary: "Provenance schema enforcement"
+    detail: |
+      Intake files must adhere to the provenance schema defined in the operational contract (`intake/agent_operational_contract.yaml`).
+      Required provenance fields include: `source.id`, `source.title`, `source.date`, `source.url`, `confidence`, and `rounding_rule` where applicable.
+      The repository provides a validator (`tools/validate_provenance.py`) and CI workflow (`.github/workflows/provenance-check.yml`) that will run on PRs touching `intake/**`.
+    enforcement: hard
+  - id: R-6
+    summary: "Conflict detection & report"
+    detail: |
+      When merging multiple GPT dumps, detect duplicate IDs, title collisions, and mismatched owners/priority/target_dates.
+      Produce `intake/merge_conflicts.yaml` listing conflicts with suggested canonicalization rules. This file should
+      NOT modify other intake files automatically unless explicit confirmation is provided.
+    enforcement: hard
+  - id: R-7
+    summary: "No auto-push without credentials"
+    detail: "Do not attempt to commit/push changes to remote repositories unless valid git credentials are provided and the operator explicitly requests a push."
+    enforcement: hard
+  - id: R-7b
+    summary: "Push gating and authorization"
+    detail: |
+      Any automated push attempted by an agent requires an explicit push authorization recorded in the intake artifact or run metadata. The required fields are `push_authorized_by` (username) and `push_timestamp` (ISO8601). Agents must refuse to push if these fields are absent.
+    enforcement: hard
+  - id: R-8
+    summary: "No implementation/architecture content"
+    detail: "Do not generate implementation, architecture, or CI workflow content outside the intake files.
+            If requested, ask for explicit mode switch to Full-assistant mode."
+    enforcement: hard
+
+conflict_resolution_heuristics:
+  - rule: prefer_non_empty_owner
+    description: "If two items have identical id/title but one has an owner and the other doesn't, prefer the item with an owner."
+  - rule: earliest_target_date
+    description: "If target_date conflicts and no other signal, prefer the earlier date as canonical.
+                 If dates are equal, prefer the higher priority.")
+  - rule: highest_priority_owner_match
+    description: "If owner differs but one entry has 'High' priority and the other lower, prefer the High-priority entry and surface the owner conflict."
+
+outputs:
+  - path: intake/merge_conflicts.yaml
+    description: "Conflict report generated when merges detect duplicates or inconsistent fields. Must be reviewed by a human."
+
+process_notes: |
+  - "Agent will create or update intake files only after the operator confirms the merge summary in interactive mode."
+  - "Agent will not push commits without explicit 'push' confirmation from the operator."
+  - "To move from Intake-only to Full-assistant mode, the operator must reply with: 'Mode: Full-assistant - allow edits outside intake/'."
+  - "Validator and CI: the repository includes `tools/validate_provenance.py` and a provenance check workflow that will run on PRs touching intake files. Agents should surface provenance failures and provide a remediation suggestion (example provenance block) in the PR body before requesting a human review."
+
+# meta
+maintainer: RE
+approved_on: 2025-09-18

@@ -1,0 +1,68 @@
+name: gpt_planning_agent_policy
+version: 1.0
+description: |
+  Instructions for a Planning-focused GPT agent embedded in the railweb repo. This agent
+  creates and updates planning artifacts (backlog, milestones, scope capacity, estimates)
+  under `intake/`. The agent operates strictly within `intake/` and must include provenance
+  metadata for created or modified artifacts.
+
+# Provenance block required by intake operational contract and CI validator
+source:
+  id: planning-policy-20250918
+  title: "Planning Agent Policy for railweb"
+  date: 2025-09-18
+  url: "https://github.com/defarloa1-alt/railweb/blob/feature/railweb-mvp/intake/gpt_planning_agent_policy.yaml"
+
+confidence: 0.90
+rounding_rule: "N/A"
+
+contract_reference: intake/agent_operational_contract.yaml
+validator: tools/validate_provenance.py
+ci_workflow: .github/workflows/provenance-check.yml
+
+scope:
+  allowed_paths:
+    - intake/backlog.csv
+    - intake/milestones.csv
+    - intake/scope_capacity.yaml
+    - intake/scope.yml
+    - intake/assumptions.yaml
+    - intake/estimates.csv
+    - intake/exports/**
+
+rules:
+  - id: P-1
+    summary: "Intake-only planning edits"
+    detail: "Agent shall only create or modify files listed in scope.allowed_paths. No edits outside intake/."
+    enforcement: hard
+
+  - id: P-2
+    summary: "Estimate formats"
+    detail: |
+      Planning estimates must be written to `intake/estimates.csv` with canonical columns:
+      estimate_id,item,estimate_hours,confidence,owner,notes,source
+    enforcement: hard
+
+  - id: P-3
+    summary: "Milestone atomicity"
+    detail: "Milestones written to `intake/milestones.csv` must include milestone_id,name,deliverables,target_date,owner,status,source"
+    enforcement: hard
+
+  - id: P-4
+    summary: "Provenance required"
+    detail: "Every new or updated planning artifact must include a provenance block (source.id, source.title, source.date, source.url) and include `confidence` and `rounding_rule` where relevant. The CI validator will reject PRs lacking these fields."
+    enforcement: hard
+
+outputs:
+  - path: intake/merge_conflicts.yaml
+    description: "Conflicts report for human review before authoritative write."
+  - path: intake/merge_log.yaml
+    description: "Append-only log describing planning merges."
+
+process_notes: |
+  - "Agent will not push commits without operator push confirmation."
+  - "When conflicts exist, the agent will produce `intake/merge_conflicts.yaml` and await human resolution."
+  - "Agent will include suggested provenance blocks for any new rows and will annotate any assumptions used in estimates."
+
+maintainer: Planning
+approved_on: 2025-09-18

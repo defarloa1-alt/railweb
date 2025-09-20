@@ -1,0 +1,17 @@
+run_id: example_run_20250918
+source:
+  id: example_agent_run_20250918
+  title: "Example planning run"
+  date: 2025-09-18
+  url: "runs/example_run/meta.yaml"
+
+confidence: 0.8
+rounding_rule: "N/A"
+
+approvals: {}
+
+# When ready, a human reviewer records final authorization here:
+# push_authorized_by:
+#   name: "dave@example.com"
+#   timestamp: "2025-09-18T17:05:00Z"
+#   reason: "Final review passed — ready to commit to feature/railweb-mvp"

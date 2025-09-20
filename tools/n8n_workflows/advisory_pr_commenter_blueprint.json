@@ -1,0 +1,74 @@
+{
+  "name": "Advisory PR Checklist Commenter (railweb)",
+  "description": "Blueprint for n8n: listens to PR events, checks PR body for citation, safety and hardware checklist items, and posts/updates an advisory comment.",
+  "nodes": [
+    {
+      "id": "WebhookTrigger",
+      "type": "n8n-nodes-base.githubTrigger",
+      "name": "GitHub PR Trigger",
+      "config": {
+        "event": "pull_request",
+        "actions": ["opened","edited","synchronize"],
+        "repository": "defarloa1-alt/railweb"
+      }
+    },
+    {
+      "id": "CheckPRBody",
+      "type": "n8n-nodes-base.code",
+      "name": "Check PR body",
+      "config": {
+        "language": "javascript",
+          "code": "// Simplified PR body checks (avoid complex regex in JSON)\nconst item = items[0].json;\nconst pr = item.pull_request || {};\nconst body = (pr.body || '').toLowerCase();\nconst owner = item.repository.owner && item.repository.owner.login;\nconst repo = item.repository && item.repository.name;\nconst number = pr.number;\nconst author = pr.user && pr.user.login;\nconst checks = [\n  { key: 'citation', label: 'Citation / Source metadata', tests: ['source','citation','provenance','references'] },\n  { key: 'safety', label: 'Safety gating acknowledgement', tests: ['safety gate','safety','opt-in','opt in','local-only','local only','require confirmation'] },\n  { key: 'hardware', label: 'Hardware/manual test checklist', tests: ['- [x]','hardware test','manual test','do not auto'] }\n];\nconst missing = [];\nfor (const c of checks) {\n  let ok = false;\n  for (const t of c.tests) {\n    if (body.indexOf(t) !== -1) { ok = true; break; }\n  }\n  if (!ok) missing.push(c.label);\n}\nreturn [{ json: { owner, repo, number, author, prTitle: pr.title, prUrl: pr.html_url, missingItems: missing } }];"
+      }
+    },
+    {
+      "id": "GetComments",
+      "type": "n8n-nodes-base.httpRequest",
+      "name": "Get PR comments",
+      "config": {
+        "method": "GET",
+        "url": "=https://api.github.com/repos/{{$json.owner}}/{{$json.repo}}/issues/{{$json.number}}/comments",
+        "authentication": "headerAuth",
+        "headerParameters": [
+          { "name": "Authorization", "value": "Bearer {{$env.GITHUB_PAT}}" },
+          { "name": "Accept", "value": "application/vnd.github.v3+json" }
+        ]
+      }
+    },
+    {
+      "id": "FindExistingComment",
+      "type": "n8n-nodes-base.code",
+      "name": "Find existing advisory comment",
+      "config": {
+        "language": "javascript",
+        "code": "const comments = items[0].json || [];\nconst botSentinel = '<!-- railweb-checker-advisory -->';\nlet found = null;\nfor (let i = 0; i < comments.length; i++) {\n  const c = comments[i];\n  if (c && c.body && String(c.body).includes(botSentinel)) { found = c; break; }\n}\nreturn [{ json: { foundComment: found } }];"
+      }
+    },
+    {
+      "id": "BuildComment",
+      "type": "n8n-nodes-base.code",
+      "name": "Build advisory message",
+      "config": {
+        "language": "javascript",
+        "code": "const ctx = items[0].json || {};\nconst missing = ctx.missingItems || [];\nconst author = ctx.author || 'author';\nif (!missing || missing.length === 0) {\n  return [{ json: { action: 'none' } }];\n}\nlet md = '<!-- railweb-checker-advisory -->\\nHi @' + author + ', I checked this PR and the following required checklist items appear missing:\\n\\n';\nfor (let i = 0; i < missing.length; i++) { md += '- ' + missing[i] + '\\n'; }\nmd += '\\nPlease add them to the PR body (see .github/pull_request_template.md). This comment is advisory only.';\nreturn [{ json: { action: 'comment', body: md, missing } }];"
+      }
+    },
+    {
+      "id": "CreateOrUpdateComment",
+      "type": "n8n-nodes-base.httpRequest",
+      "name": "Create or update comment",
+      "config": {
+        "method": "POST_OR_PATCH_PLACEHOLDER",
+        "url": "https://api.github.com/",
+        "authentication": "headerAuth",
+        "headerParameters": [
+          { "name": "Authorization", "value": "Bearer {{$env.GITHUB_PAT}}" },
+          { "name": "Accept", "value": "application/vnd.github.v3+json" },
+          { "name": "Content-Type", "value": "application/json" }
+        ],
+        "note": "This node will need workflow expressions to switch between POST (create comment) and PATCH (update existing comment) using comment id from FindExistingComment node. Configure in n8n editor." 
+      }
+    }
+  ],
+  "notes": "This is a blueprint: import into n8n and adjust node ids and wiring. Set env GITHUB_PAT in n8n to your PAT. The CreateOrUpdateComment node must be split into two HTTP Request nodes in n8n editor (one POST, one PATCH) with conditional routing based on whether an existing comment was found."
+}

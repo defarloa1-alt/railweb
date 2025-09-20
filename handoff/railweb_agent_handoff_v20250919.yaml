@@ -1,0 +1,6 @@
+name: railweb-agent-handoff
+version: 2025-09-19
+entry_points:
+  - tools/debate/generate_debate_insights.py
+notes: |
+  Includes debate tooling, mock adapter, and visualization scaffold.

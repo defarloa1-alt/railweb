@@ -1,0 +1,22 @@
+{
+  "run_id": "local-sample",
+  "generated_at": "2025-09-18T00:00:00Z",
+  "llm": {"model": "gpt-4o"},
+  "tts_provider": "elevenlabs",
+  "audio_generated": false,
+  "audio_path": null,
+  "highlights_provenance": [
+    {
+      "id": "h1",
+      "title": "Scale Converter Notes",
+      "excerpt": "Converter outputs match hand-checked results",
+      "provenance": {
+        "author": "Unknown",
+        "source_title": "Scale Converter Notes",
+        "doc_url": null,
+        "exported_at": "2025-09-18T00:00:00Z",
+        "checksum": "abc123"
+      }
+    }
+  ]
+}

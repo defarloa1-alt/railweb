@@ -1,0 +1,29 @@
+{
+  "name": "Obsidian -> intake sync (railweb)",
+  "description": "Blueprint for n8n: receives webhook POSTs from Obsidian 'Post Webhook' plugin, validates, parses front-matter and creates intake/requests/<uid>.md on a new branch and opens a draft PR in defarloa1-alt/railweb.",
+  "nodes": [
+    {
+      "id": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "name": "Obsidian Webhook Trigger",
+      "config": {
+        "httpMethod": "POST",
+        "path": "obsidian-intake-sync",
+        "responseMode": "onReceived",
+        "additionalOptions": {
+          "readRawBody": true
+        }
+      }
+    },
+    {
+      "id": "VerifyAndParse",
+      "type": "n8n-nodes-base.code",
+      "name": "Verify signature & parse front-matter",
+      "config": {
+        "language": "javascript",
+        "code": "const crypto = require('crypto');\\nconst jsYaml = require('js-yaml');\\n// Try to read raw body from binary or json field\\nlet raw = '';\\nif (items[0].binary && items[0].binary.data && items[0].binary.data.data) {\\n  raw = Buffer.from(items[0].binary.data.data, 'base64').toString('utf8');\\n} else if (items[0].json && items[0].json.content) {\\n  raw = items[0].json.content;\\n} else {\\n  raw = JSON.stringify(items[0].json || {});\\n}\\n// Verify signature (HMAC-SHA256) if provided\\nconst headers = (items[0].json && items[0].json.headers) || {};\\nconst sig = headers['x-obsidian-signature'] || headers['X-Obsidian-Signature'] || headers['x-signature'] || headers['X-Signature'];\\nconst token = headers['x-obsidian-token'] || headers['X-Obsidian-Token'];\\nconst secret = process.env.WEBHOOK_SECRET || '';\\nfunction verifyHMAC(secret, body, signatureHex) {\\n  if (!secret || !signatureHex) return false;\\n  try {\\n    const h = crypto.createHmac('sha256', secret).update(body, 'utf8').digest('hex');\\n    return crypto.timingSafeEqual(Buffer.from(h), Buffer.from(signatureHex));\\n  } catch (e) { return false; }\\n}\\nif (sig) {\\n  if (!verifyHMAC(secret, raw, sig)) {\\n    throw new Error('Invalid HMAC signature');\\n  }\\n} else if (process.env.WEBHOOK_TOKEN) {\\n  if (!token || token !== process.env.WEBHOOK_TOKEN) {\\n    throw new Error('Missing or invalid token');\\n  }\\n}\\n\\n// Parse front-matter YAML (expect leading --- blocks)\\nconst fmMatch = raw.match(/^---\\s*[\\r\\n]+([\\s\\S]*?)\\r?\\n---\\s*\\r?\\n([\\s\\S]*)$/);\\nif (!fmMatch) {\\n  // return structured error payload for downstream handling\\n  return [{ json: { valid: false, reason: 'missing_front_matter' } }];\\n}\\nconst yamlText = fmMatch[1];\\nconst bodyText = fmMatch[2];\\nlet meta = {};\\ntry { meta = jsYaml.load(yamlText) || {}; } catch (e) { return [{ json: { valid: false, reason: 'invalid_yaml', error: String(e) } }]; }\\n// Validate minimal fields\\nconst required = ['uid','title','type'];\\nconst missing = required.filter(k => !meta[k]);\\nif (missing.length) {\\n  return [{ json: { valid: false, reason: 'missing_fields', missing } }];\\n}\\n// Build intake markdown\\nconst intakeMd = `---\\nuid: ${meta.uid}\\ntitle: ${meta.title}\\ntype: ${meta.type}\\nsource: obsidian\\nsource_path: ${items[0].json && (items[0].json.path || items[0].json.filename) || 'unknown'}\\nsource_timestamp: ${new Date().toISOString()}\\n---\\n\\n# ${meta.title}\\n\\n${meta.summary || ''}\\n\\n## Original note\\n\\n${bodyText}\\n\\n## Provenance\\n- author: ${meta.author || items[0].json && items[0].json.author || 'unknown'}\\n- source: Obsidian (vault)\\n`;\\n\\nreturn [{ json: { valid: true, meta, intakePath: `intake/requests/${meta.uid}.md`, intakeContent: intakeMd } }];"
+      }
+    }
+  ],
+  "notes": "This blueprint shows nodes and behavior; replace placeholders and wire GitHub API nodes (or n8n GitHub nodes) to create branch, commit file, and open draft PR. Use environment variables GITHUB_PAT, WEBHOOK_SECRET, and TARGET_REPO."
+}

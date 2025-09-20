@@ -1,0 +1,86 @@
+{
+  "name": "Pipeline Audio Overview (n8n blueprint)",
+  "description": "Generates a short audible summary whenever a pipeline workflow execution is reported. Webhook-triggered: other workflows POST execution metadata to this webhook.",
+  "env_requirements": [
+    "OPENAI_API_KEY",
+    "TTS_PROVIDER",
+    "ELEVENLABS_API_KEY",
+    "AWS_ACCESS_KEY_ID",
+    "AWS_SECRET_ACCESS_KEY",
+    "AWS_REGION",
+    "AWS_S3_BUCKET",
+    "GITHUB_PAT (optional)",
+    "WEBHOOK_SECRET (optional)"
+  ],
+  "nodes": [
+    {
+      "id": "WebhookTrigger",
+      "type": "Webhook",
+      "name": "Webhook Trigger - pipeline-audio",
+      "config": {
+        "httpMethod": "POST",
+        "path": "webhook/pipeline-audio",
+        "responseMode": "onReceived",
+        "responseData": { "statusCode": 202, "body": { "message": "Queued for audio synthesis" } }
+      }
+    },
+    {
+      "id": "VerifyAndNormalize",
+      "type": "Function",
+      "name": "Verify & Normalize Payload",
+      "note": "Copy the code from tools/n8n_workflows/pipeline_audio_functions/verify_and_normalize.js into this Function node."
+    },
+    {
+      "id": "BuildPrompt",
+      "type": "Function",
+      "name": "Build LLM Prompt",
+      "note": "Copy the code from tools/n8n_workflows/pipeline_audio_functions/build_prompt.js into this Function node."
+    },
+    {
+      "id": "LLMSummarize",
+      "type": "HTTP Request",
+      "name": "LLM - OpenAI ChatCompletion",
+      "note": "Configure to POST to OpenAI Chat Completions using $env.OPENAI_API_KEY and the prompt from the BuildPrompt node."
+    },
+    {
+      "id": "ParseLLM",
+      "type": "Function",
+      "name": "Parse LLM JSON",
+      "note": "Copy the code from tools/n8n_workflows/pipeline_audio_functions/parse_llm.js into this Function node."
+    },
+    {
+      "id": "TTS",
+      "type": "HTTP Request",
+      "name": "TTS - ElevenLabs (or provider)",
+      "note": "Configure per your chosen provider; use $json.script as the payload."
+    },
+    {
+      "id": "StoreS3",
+      "type": "S3",
+      "name": "Store audio + transcript",
+      "note": "Store artifacts under intake/exports/audio/{{ $json.run_id }}.mp3 and set ACL private."
+    },
+    {
+      "id": "MakeDraftPR",
+      "type": "HTTP Request",
+      "name": "Create draft PR (optional)",
+      "note": "Optional: create a draft PR using GITHUB_PAT to attach metadata and S3 locations."
+    },
+    {
+      "id": "Notify",
+      "type": "Slack",
+      "name": "Notify owner (optional)",
+      "note": "Notify on completion with a private S3 pre-signed URL and show notes."
+    }
+  ],
+  "sample_callers_integration": {
+    "how_other_workflows_call": "POST a small JSON payload to https://<your-n8n-host>/webhook/pipeline-audio with { run_id, workflowName, status, duration_ms, highlights, top_logs }.",
+    "sample_curl": "curl -X POST https://<your-n8n-host>/webhook/pipeline-audio -H 'Content-Type: application/json' -d '{ ... }'",
+    "test_notes": "Use ngrok for local n8n. Optionally set WEBHOOK_SECRET and have callers sign payloads."
+  },
+  "operational_notes": [
+    "Keep episodes private by default; use pre-signed S3 URLs for sharing.",
+    "Limit LLM/TTS usage to control cost.",
+    "Avoid storing PII in exported artifacts; hash or redact identifiers."
+  ]
+}
