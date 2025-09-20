@@ -11,6 +11,15 @@
 - **Platform Agnostic**: Works on desktop and mobile, no required cloud account for v1.
 - **Open for All**: Guides for hobbyists, clubs, educators—founded on community and accuracy.
 
+<!--TABLE:START-->
+
+| Name   | Status      | Notes          |
+| ------ | ----------- | -------------- |
+| Task A | Done        | Completed work |
+| Task B | In Progress | Work ongoing   |
+
+<!--TABLE:END-->
+
 ## Features
 
 - **Reference Library**: Specs and how-tos, tightly sourced and date/version stamped.
