@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["run_id", "provenance", "approvals", "push_authorized_by"],
+  "properties": {
+    "run_id": { "type": "string" },
+    "provenance": {
+      "type": "object",
+      "required": ["source"],
+      "properties": {
+        "source": {
+          "type": "object",
+          "required": ["id", "title", "date"],
+          "properties": {
+            "id": { "type": "string" },
+            "title": { "type": "string" },
+            "date": { "type": "string" },
+            "url": { "type": "string" }
+          }
+        },
+        "confidence": { "type": "number" },
+        "rounding_rule": { "type": "string" }
+      }
+    },
+    "approvals": { "type": "object" },
+    "push_authorized_by": {}
+  }
+}

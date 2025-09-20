@@ -1,0 +1,25 @@
+run_id: example_run
+provenance:
+  source:
+    id: example_agent_run_20250920
+    title: "Example planning run"
+    date: 2025-09-20
+    url: "runs/example_run/meta.yaml"
+  confidence: 0.85
+  rounding_rule: "nearest-0.01"
+approvals:
+  planner:
+    name: "alice@example.com"
+    timestamp: "2025-09-20T10:00:00Z"
+    note: "Planner approval placeholder"
+  requirements:
+    name: "bob@example.com"
+    timestamp: "2025-09-20T11:00:00Z"
+    note: "Requirements approval placeholder"
+  architecture:
+    name: "carol@example.com"
+    timestamp: "2025-09-20T12:00:00Z"
+    note: "Architecture approval placeholder"
+push_authorized_by: null
+notes: |
+  A local copy of the example run meta used for dev/testing.
