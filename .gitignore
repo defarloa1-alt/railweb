@@ -1,3 +1,17 @@
+# Local pytest/test artifacts
+.local_test_tmp/
+.pytest_base/
+.pytest_local_tmp/
+
+# VS Code/Obsidian/editor workspace files
+.vscode/**/workspace.json
+.obsidian/
+
+# Python venvs
+.venv/
+
+# Node modules (visualization app)
+tools/debate/visualization/node_modules/
 # Ignore OS/editor junk 
 .DS_Store 
 Thumbs.db 
