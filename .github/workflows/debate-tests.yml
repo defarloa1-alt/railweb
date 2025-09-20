@@ -24,4 +24,4 @@ jobs:
         run: |
           echo "## Setting PYTHONPATH to repository root"
           echo "PYTHONPATH=$(pwd)" >> $GITHUB_ENV
-          python -m pytest -q -s
+          python -m pytest -q
