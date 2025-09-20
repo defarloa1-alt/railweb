@@ -6,7 +6,7 @@ If no paths are provided the script scans the repository root recursively.
 import sys
 from pathlib import Path
 
-CONFLICT_MARKERS = ["<<<<<<<", "=======", ">>>>>>>"]
+CONFLICT_MARKERS = ["<" * 7, "=" * 7, ">" * 7]
 
 
 def scan_paths(paths):
