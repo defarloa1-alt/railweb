@@ -1,0 +1,3 @@
+[submodule "tools/external/chronograph-vault"]
+	path = tools/external/chronograph-vault
+	url = https://github.com/defarloa1-alt/chronograph-vault.git
