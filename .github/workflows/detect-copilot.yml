@@ -1,0 +1,83 @@
+name: Detect Copilot / Assistant Content
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  detect:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Fetch base branch
+        run: |
+          git fetch origin ${{ github.event.pull_request.base.ref }} --depth=1
+
+      - name: Compute changed files
+        id: changed
+        run: |
+          CHANGED=$(git diff --name-only origin/${{ github.event.pull_request.base.ref }}...HEAD || true)
+          echo "CHANGED_FILES<<EOF" >> $GITHUB_OUTPUT
+          echo "$CHANGED" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Run Copilot detector
+        id: detect
+        run: |
+          echo "Changed files:"; echo "$CHANGED_FILES"
+          if [ -z "$CHANGED_FILES" ]; then
+            echo "No changed files to scan.";
+            echo '{}' > copilot_report.json;
+            exit 0;
+          fi
+          # Run detector and always produce a JSON report (exit code 1 if matches)
+          python tools/detect_copilot.py $CHANGED_FILES --json > copilot_report.json || true
+
+      - name: Comment and label PR when Copilot markers found
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const fs = require('fs');
+            const reportPath = 'copilot_report.json';
+            if (!fs.existsSync(reportPath)) {
+              console.log('No report found, skipping.');
+              return;
+            }
+            const report = JSON.parse(fs.readFileSync(reportPath, 'utf8'));
+            if (!report.matches || report.matches.length === 0) {
+              console.log('No copilot markers detected.');
+              return;
+            }
+            const summary = report.matches.map(r => ({ path: r.path, hits: r.matches.length }));
+            const body = [`**Copilot / assistant markers detected**`, '', 'Summary:', '```json', JSON.stringify(summary, null, 2), '```', '', 'Full report attached below:', '```json', JSON.stringify(report, null, 2), '```'].join('\n');
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body
+            });
+            const label = 'copilot-detected';
+            try {
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                labels: [label]
+              });
+            } catch (e) {
+              console.log('Failed to add label:', e.message);
+            }
