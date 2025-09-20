@@ -60,7 +60,25 @@ def query_db(db_id, token, dry_run=False):
     payload = {}
     while True:
         r = requests.post(url, headers=headers, json=payload, timeout=30)
-        r.raise_for_status()
+        try:
+            r.raise_for_status()
+        except requests.HTTPError:
+            # provide helpful debug information without printing secrets
+            print(f'Notion query POST {url} returned status {r.status_code}', file=sys.stderr)
+            try:
+                # print short response body to stderr for quick diagnosis
+                print('Response body:', r.text, file=sys.stderr)
+            except Exception:
+                pass
+            try:
+                # also write full response to a debug file for later inspection
+                dbg_path = os.path.join(os.getcwd(), 'notion_query_debug.json')
+                with open(dbg_path, 'w', encoding='utf8') as dbg:
+                    dbg.write(r.text)
+                print(f'Wrote debug response to {dbg_path}', file=sys.stderr)
+            except Exception:
+                pass
+            raise
         j = r.json()
         results.extend(j.get('results', []))
         if not j.get('has_more'):
@@ -196,14 +214,31 @@ def render_status_badge(name: str, color: str | None) -> str:
 
 
 def md_table(rows, header=None):
-    header = header or [c[0] for c in COLUMN_MAP]
+    # Derive header names if not explicitly provided. COLUMN_MAP may use dict entries
+    # with a 'header' key (the legacy code assumed sequence entries).
+    if header is None:
+        header = []
+        for c in COLUMN_MAP:
+            if isinstance(c, dict):
+                header.append(str(c.get('header', '')))
+            elif isinstance(c, (list, tuple)) and len(c) > 0:
+                header.append(str(c[0]))
+            else:
+                header.append('')
+
     cols = len(header)
     widths = [len(h) for h in header]
     for r in rows:
+        # normalize row length
+        if len(r) < cols:
+            r = r + [''] * (cols - len(r))
         for i in range(cols):
-            widths[i] = max(widths[i], len(r[i]))
-    def fmt(r): return '| ' + ' | '.join(r[i].ljust(widths[i]) for i in range(cols)) + ' |'
-    sep = '| ' + ' | '.join('-'*w for w in widths) + ' |'
+            widths[i] = max(widths[i], len(str(r[i])))
+
+    def fmt(row):
+        return '| ' + ' | '.join(str(row[i]).ljust(widths[i]) for i in range(cols)) + ' |'
+
+    sep = '| ' + ' | '.join('-' * w for w in widths) + ' |'
     return '\n'.join([fmt(header), sep] + [fmt(r) for r in rows])
 
 

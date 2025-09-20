@@ -1,0 +1,23 @@
+{
+  "name": "Create Run via HTTP Request",
+  "nodes": [
+    {
+      "parameters": {
+        "url": "http://127.0.0.1:5001/internal/create_run",
+        "method": "POST",
+        "jsonParameters": true,
+        "options": {
+          "headers": {
+            "Authorization": "Bearer {{ $json[\"api_token\"] }}"
+          }
+        },
+        "bodyParametersJson": "={\"run_id\": \"example-from-n8n\", \"meta\": {\"run_id\": \"example-from-n8n\", \"provenance\": {\"source\": {\"id\": \"n8n\", \"title\": \"n8n run\", \"date\": \"2025-09-20\"}}, \"approvals\": {}, \"push_authorized_by\": null}}"
+      },
+      "name": "HTTP Request",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [400, 300]
+    }
+  ],
+  "connections": {}
+}

@@ -94,6 +94,61 @@ def parse_insights_from_adapter_response(data: Dict[str, Any]) -> Dict[str, Any]
     raise ValueError('No parseable JSON found in adapter response')
 
 
+def _parse_score_value(raw: Any) -> float:
+    """Normalize a score value into a float in the range [0.0, 1.0].
+
+    Accepts:
+    - floats/ints in [0.0, 1.0]
+    - ints/floats in [0, 100] interpreted as percentages
+    - strings like "0.8", "80", or "80%"
+
+    Raises ValueError if the value cannot be interpreted.
+    """
+    if raw is None:
+        raise ValueError('score must be a number between 0.0 and 1.0')
+
+    # numeric types: treat ints as possible percentage (0-100), but floats must be in 0.0-1.0
+    if isinstance(raw, int):
+        val = float(raw)
+        if 0.0 <= val <= 1.0:
+            return val
+        if 0.0 <= val <= 100.0:
+            return val / 100.0
+        raise ValueError('score must be between 0.0 and 1.0')
+
+    if isinstance(raw, float):
+        val = float(raw)
+        if 0.0 <= val <= 1.0:
+            return val
+        # do not interpret floats > 1.0 as percentages (1.5 is invalid)
+        raise ValueError('score must be between 0.0 and 1.0')
+
+    # strings
+    if isinstance(raw, str):
+        s = raw.strip()
+        # percent string
+        if s.endswith('%'):
+            try:
+                v = float(s[:-1].strip())
+            except Exception:
+                raise ValueError('score must be between 0.0 and 1.0')
+            if 0.0 <= v <= 100.0:
+                return v / 100.0
+            raise ValueError('score must be between 0.0 and 1.0')
+
+        # plain numeric string
+        try:
+            v = float(s)
+        except Exception:
+            raise ValueError('score must be between 0.0 and 1.0')
+        if 0.0 <= v <= 1.0:
+            return v
+        if 0.0 <= v <= 100.0:
+            return v / 100.0
+        raise ValueError('score must be between 0.0 and 1.0')
+
+    raise ValueError('score must be a number between 0.0 and 1.0')
+
 def validate_insights(insights: Dict[str, Any]) -> None:
     """Validate the parsed insights shape and value ranges.
 
@@ -108,11 +163,14 @@ def validate_insights(insights: Dict[str, Any]) -> None:
         raise ValueError('summary must be a non-empty string')
 
     # score
-    score = insights.get('score')
-    if score is None or not (isinstance(score, float) or isinstance(score, int)):
-        raise ValueError('score must be a number between 0.0 and 1.0')
-    if not (0.0 <= float(score) <= 1.0):
+    # normalize and validate score (accept percentages and strings like '80%')
+    raw_score = insights.get('score')
+    try:
+        norm = _parse_score_value(raw_score)
+    except Exception:
         raise ValueError('score must be between 0.0 and 1.0')
+    # put the normalized float back into the dict for downstream use
+    insights['score'] = norm
 
     # actions
     actions = insights.get('actions')
