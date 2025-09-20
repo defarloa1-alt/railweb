@@ -1,3 +1,0 @@
-Detailed report including visuals (or code if no vis) on as a user i enter the knowledge graph. perhaps at first it starts with me as the node, and ai has determined my profile in general, my interests. these are  potential filters - persona filters so to speak.  For pretty and understandable views of the graph. family trees, an sdlc, cards, there are many infographics but *the system should render the most pertinent view to display based on the situation at hand - with user overrides of course.*
-
-Explore advances in knowledge graph visuals within the science of infographics itself.

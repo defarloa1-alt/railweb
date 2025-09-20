@@ -14,6 +14,9 @@ Files
 - `requirements-to-planner-architect.example.json` - Minimal golden example that validates against the schema.
 - `requirements-to-planner-architect.example.yaml` - YAML twin of the golden example.
 
+- `railweb_agent_handoff_v20250919.yaml` - Machine-readable agent handoff packet summarizing entrypoints, CI, and artifacts.
+- `railweb_agent_handoff_v20250919.md` - Human-readable handoff summary for agents and maintainers.
+
 How to use
 ----------
 

@@ -1,0 +1,90 @@
+--- 0d01214 --- 
+commit 0d012149c09f0f5fc214cd68a2ba5d349d9c8f60
+Author:     Tony DeFarlo <defarloa1@gmail.com>
+AuthorDate: Thu Sep 18 10:34:18 2025 -0400
+Commit:     Tony DeFarlo <defarloa1@gmail.com>
+CommitDate: Thu Sep 18 10:34:18 2025 -0400
+
+     docs: add MIRROR_TOKEN guidance and GPT-preview checklist reminder in PR template
+
+.github/pull_request_template.md
+handoff/README.md
+ 
+--- c142426 --- 
+commit c14242601351962f8c96c9a4459bd93781961774
+Author:     Tony DeFarlo <defarloa1@gmail.com>
+AuthorDate: Thu Sep 18 18:16:50 2025 -0400
+Commit:     Tony DeFarlo <defarloa1@gmail.com>
+CommitDate: Thu Sep 18 18:16:50 2025 -0400
+
+    Stablize Point
+
+.obsidian/workspace.json
+handoff/AI_ASSISTANT_HANDOVER.md
+intake/AGENT_PUSH_WORKFLOW.md
+intake/Untitled.md
+intake/gpt_planning_agent_policy.yaml
+runs/example_run/meta.yaml
+tasklist
+tools/approval_ui/npm
+tools/approval_ui/package-lock.json
+tools/approval_ui/src/index.js
+tools/llm_adapter/.env.example
+tools/llm_adapter/README.md
+tools/llm_adapter/package.json
+tools/llm_adapter/src/index.js
+tools/llm_adapter/src/providers/openai.js
+tools/llm_adapter/src/providers/perplexity.js
+ 
+--- faaf9b5 --- 
+commit faaf9b5267de730ded935f79c1709c842cde1c5b
+Author:     Tony DeFarlo <defarloa1@gmail.com>
+AuthorDate: Sat Sep 20 03:51:29 2025 -0400
+Commit:     Tony DeFarlo <defarloa1@gmail.com>
+CommitDate: Sat Sep 20 03:51:29 2025 -0400
+
+    ci: ignore local test artifacts, editor workspace and venv
+
+.gitignore
+ 
+--- 0e3dc5a --- 
+commit 0e3dc5a4e290323b70080a9d1894bef1deb1fcb5
+Author:     Tony DeFarlo <defarloa1@gmail.com>
+AuthorDate: Sat Sep 20 04:33:12 2025 -0400
+Commit:     Tony DeFarlo <defarloa1@gmail.com>
+CommitDate: Sat Sep 20 04:33:12 2025 -0400
+
+    ci: add requests and pytest to requirements so CI installs test deps
+
+requirements.txt
+ 
+--- e9940ca --- 
+commit e9940ca9b208b1cd237ed4cedb77d7746a0cabe0
+Author:     Tony DeFarlo <defarloa1@gmail.com>
+AuthorDate: Fri Sep 19 16:54:45 2025 -0400
+Commit:     Tony DeFarlo <defarloa1@gmail.com>
+CommitDate: Fri Sep 19 16:54:45 2025 -0400
+
+     docs: add Copilot pilot README and PR template
+
+.github/pull_request_template.md
+docs/Copilot-Pilot-README.md
+ 
+--- 711b604 --- 
+commit 711b6043da56b622d6bd67621979b98c19dcba35
+Author:     Tony DeFarlo <defarloa1@gmail.com>
+AuthorDate: Thu Sep 18 15:12:15 2025 -0400
+Commit:     Tony DeFarlo <defarloa1@gmail.com>
+CommitDate: Thu Sep 18 15:12:15 2025 -0400
+
+    Governance: reference operational contract and validator in intake agent policies; add validator and CI workflow; tools README
+
+.github/workflows/provenance-check.yml
+intake/agent_operational_contract.yaml
+intake/gpt_architecture_agent_policy.yaml
+intake/gpt_intake_agent_policy.yaml
+intake/gpt_requirements_agent_policy.yaml
+intake/merged_backlog.yaml
+intake/scope_capacity.yaml
+tools/README.md
+tools/validate_provenance.py

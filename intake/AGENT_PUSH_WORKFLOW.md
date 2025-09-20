@@ -62,3 +62,83 @@ Minimal checklist before pushing to `feature/railweb-mvp`
 If any step fails, the run should remain unmerged and the reviewer should request changes from the agent or make manual edits.
 
 Maintainers may adapt the required approvers list and the minimal checklist to match changes in the intake contract.
+
+
+Here’s a clear, novice-friendly summary of the **Agent Push Workflow (Human-in-the-Loop)** for the `railweb` repository:
+
+---
+
+### 🧠 What It Is:
+
+A safe, structured process for using GPT agents to generate planning, requirements, and architecture documents — with human reviewers at each step to ensure quality and traceability.
+
+---
+
+### 🔄 High-Level Workflow:
+
+1. **Agent Proposal (Planner Run):**
+    
+    - An agent creates a planning artifact.
+    - It saves the output in `runs/<run-id>/` or uploads it to a pull request (PR).
+    - Must include **provenance metadata** (source info, confidence, etc.).
+2. **Planner Review:**
+    
+    - A human planner checks the agent’s proposal.
+    - If approved, they add an approval block (`push_authorized_by`) in the metadata or PR.
+    - Minor edits can be made directly in VS Code.
+3. **Requirements Review:**
+    
+    - The approved plan is sent to the Requirements reviewer.
+    - They inspect requirement rows, provenance, and conflict reports.
+    - If satisfied, they add their approval block.
+4. **Architecture Review:**
+    
+    - The combined planning + requirements are reviewed by the architect.
+    - They may request changes or approve the bundle.
+5. **Final Push:**
+    
+    - Once all approvals are recorded in `meta.yaml` or PR front-matter,
+    - A human (or approved automation with a short-lived token) pushes the commit to `feature/railweb-mvp`.
+
+---
+
+### ✅ Approval Metadata Example:
+
+Stored in `meta.yaml` or PR description:
+
+```yaml
+approvals:
+  planner: { name, timestamp, note }
+  requirements: { name, timestamp, note }
+  architecture: { name, timestamp, note }
+
+push_authorized_by: { name, timestamp, reason }
+```
+
+---
+
+### 🔗 n8n/Webhook Integration:
+
+- Use **n8n** to run agents and notify reviewers via webhook.
+- Reviewers can:
+    - Approve via a secure web UI, or
+    - Manually edit `meta.yaml` and open a PR.
+- Use **short-lived tokens** for automation — never give agents long-term access.
+
+---
+
+### 🧾 Final Push Checklist:
+
+Before merging to `feature/railweb-mvp`, confirm:
+
+- [ ] `meta.yaml` exists
+- [ ] Provenance fields are filled
+- [ ] Planner, Requirements, and Architecture approvals are present
+- [ ] `push_authorized_by` is valid
+- [ ] CI provenance check passes
+
+If anything’s missing, the run stays unmerged until fixed.
+
+---
+
+Want this turned into a visual storyboard or YAML onboarding doc? I can modularize it for your intake pipeline.
