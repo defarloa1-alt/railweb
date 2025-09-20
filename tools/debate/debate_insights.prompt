@@ -1,0 +1,1 @@
+Return a JSON object with keys: summary (2-3 sentence consensus), score (0.0-1.0), actions (array of concise steps). The response should be only JSON.
