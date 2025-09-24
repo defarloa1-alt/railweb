@@ -1,0 +1,36 @@
+{
+  "@context": {
+    "rw": "https://railweb.local/vocab/",
+    "title": "schema:title",
+    "description": "schema:description",
+    "tags": "schema:keywords",
+    "type": "rw:type",
+    "provenance": "rw:provenance",
+    "timestamp": "prov:generatedAtTime",
+    "model": "rw:model",
+    "prompt_id": "rw:promptId",
+    "run_id": "rw:runId",
+    "push_authorized_by": "rw:pushAuthorizedBy"
+  },
+  "@id": "urn:railweb:note:douglas-adams-test",
+  "@type": "rw:Note",
+  "title": "Douglas Adams Test",
+  "description": "Testing Perplexity enrichment for Douglas Adams, author of The Hitchhiker's Guide to the Galaxy.",
+  "tags": [],
+  "provenance": {
+    "source": "human",
+    "model": "test",
+    "model_version": 1.0,
+    "prompt_id": "test",
+    "run_id": "test-perplexity",
+    "timestamp": "2025-09-20T14:00:00+00:00"
+  },
+  "wikidata_enrichment": {
+    "Q42": {
+      "qid": "Q42",
+      "error": "HTTP Error 403: Forbidden",
+      "wikidata_url": "https://www.wikidata.org/wiki/Q42"
+    }
+  },
+  "sameAs": "https://www.wikidata.org/wiki/Q42"
+}

@@ -1,0 +1,46 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Intake Artifact",
+  "type": "object",
+  "required": ["title", "type", "provenance"],
+  "properties": {
+    "title": {"type": "string"},
+    "type": {"type": "string", "enum": ["requirement","note","design","task"]},
+    "description": {"type": "string"},
+    "tags": {"type": "array", "items": {"type": "string"}},
+    "wikidata_qids": {"type": "array", "items": {"type": "string", "pattern": "^(Q[0-9]+|RW_[A-F0-9]{8})$"}},
+    "entity_metadata": {
+      "type": "object",
+      "description": "Metadata for synthetic entities (RW_ identifiers)",
+      "patternProperties": {
+        "^RW_[A-F0-9]{8}$": {
+          "type": "object",
+          "properties": {
+            "name": {"type": "string"},
+            "type": {"type": "string"},
+            "description": {"type": "string"}
+          },
+          "required": ["name", "type"]
+        }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "required": ["source","model","model_version","prompt_id","run_id","timestamp"],
+      "properties": {
+        "source": {"type": "string", "enum": ["openai","perplexity","human","other"]},
+        "model": {"type": "string"},
+        "model_version": {"type": "string"},
+        "prompt_id": {"type": "string"},
+        "run_id": {"type": "string"},
+        "temperature": {"type": ["number","null"]},
+        "response_tokens": {"type": ["number","null"]},
+        "timestamp": {"type": "string", "format": "date-time"},
+        "user_requestor": {"type": ["string","null"]},
+        "push_authorized_by": {"type": ["string","null"]},
+        "citation": {"type": ["string","null"]}
+      }
+    }
+  },
+  "additionalProperties": false
+}

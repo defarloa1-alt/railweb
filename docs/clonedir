@@ -1,0 +1,13 @@
+import shutil, os
+
+src = '/projects/graph-core-lib'
+dst = '/projects/automated-sdlc'
+
+# Folders to duplicate
+dirs = ['src', 'tests', 'examples', 'visual-paradigm', 'xmind', 'mermaid-diagrams', 'figma-exports']
+for d in dirs:
+    os.makedirs(os.path.join(dst, d), exist_ok=True)
+
+# Files to copy
+for f in ['README.md', 'requirements.txt', '.gitignore']:
+    shutil.copy(os.path.join(src, f), os.path.join(dst, f))

@@ -35,17 +35,24 @@ jobs:
           echo "$CHANGED" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
 
-      - name: Run Copilot detector
+      - name: Run Copilot detector on PR added lines only
         id: detect
         run: |
-          echo "Changed files:"; echo "$CHANGED_FILES"
-          if [ -z "$CHANGED_FILES" ]; then
-            echo "No changed files to scan.";
+          echo "Computing unified diff (added lines only) between base and head..."
+          BASE="origin/${{ github.event.pull_request.base.ref }}"
+          DIFF_CMD="git diff --no-color $BASE...HEAD"
+          echo "Running: $DIFF_CMD"
+          # Extract added lines from the diff (lines that start with a single '+', not the file header '+++')
+          ADDED_LINES=$(git diff --no-color $BASE...HEAD | awk '/^\+[^+]/ {sub(/^\+/, "", $0); print $0}' )
+          if [ -z "$ADDED_LINES" ]; then
+            echo "No added lines to scan.";
             echo '{}' > copilot_report.json;
             exit 0;
           fi
-          # Run detector and always produce a JSON report (exit code 1 if matches)
-          python tools/detect_copilot.py $CHANGED_FILES --json > copilot_report.json || true
+          echo "Scanning added lines (truncated preview):"
+          echo "$ADDED_LINES" | sed -n '1,200p'
+          # Feed added lines to detector via stdin; write JSON report. Do not fail the job on matches.
+          echo "$ADDED_LINES" | python tools/detect_copilot.py --json > copilot_report.json || true
 
       - name: Comment and label PR when Copilot markers found
         uses: actions/github-script@v6

@@ -1,0 +1,15 @@
+{
+  "@context": {
+    "rw": "https://railweb.local/vocab/",
+    "title": "schema:title",
+    "description": "schema:description",
+    "tags": "schema:keywords",
+    "type": "rw:type",
+    "provenance": "rw:provenance",
+    "timestamp": "prov:generatedAtTime",
+    "model": "rw:model",
+    "prompt_id": "rw:promptId",
+    "run_id": "rw:runId",
+    "push_authorized_by": "rw:pushAuthorizedBy"
+  }
+}
